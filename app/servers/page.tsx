@@ -93,7 +93,7 @@ export default function ServersPage() {
                         if (retry) {
                             loadGuilds(retry);
                         } else {
-                            router.push("/");
+                            setLoading(false); // Show login screen instead of redirecting
                         }
                     });
                 }, 1000);
@@ -126,6 +126,39 @@ export default function ServersPage() {
                     className="px-6 py-2 bg-primary hover:bg-primary/80 text-black font-bold rounded-lg transition-all"
                 >
                     Log In Again
+                </button>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-black gap-6 px-4 text-center">
+                <div className="p-6 bg-white/5 rounded-full border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                    <Shield size={48} className="text-primary" />
+                </div>
+                <div className="max-w-md space-y-2">
+                    <h1 className="text-2xl font-bold text-white">Login Required</h1>
+                    <p className="text-gray-400">
+                        You need to be logged in to manage your servers and access the dashboard.
+                    </p>
+                </div>
+                <button
+                    onClick={async () => {
+                        await supabase.auth.signInWithOAuth({
+                            provider: 'discord',
+                            options: {
+                                redirectTo: `${window.location.origin}/auth/callback`,
+                                scopes: 'identify guild.members.read guilds',
+                            },
+                        });
+                    }}
+                    className="px-8 py-3 bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center gap-2"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-current">
+                        <path d="M20.317 4.36982C18.798 3.66982 17.218 3.16982 15.558 2.99982C15.558 2.99982 15.288 3.47982 15.088 3.94982C13.258 3.67982 11.438 3.67982 9.618 3.94982C9.428 3.47982 9.148 2.99982 9.148 2.99982C7.488 3.16982 5.908 3.66982 4.378 4.36982C1.298 8.92982 0.448 13.3698 0.858 17.7498C2.918 19.2698 4.908 20.1998 6.858 20.7898C7.338 20.1498 7.768 19.4598 8.138 18.7298C7.428 18.4598 6.758 18.1298 6.118 17.7398C6.288 17.6098 6.458 17.4798 6.618 17.3398C10.158 18.9698 14.548 18.9698 18.068 17.3398C18.238 17.4798 18.398 17.6098 18.578 17.7398C17.938 18.1298 17.268 18.4598 16.558 18.7298C16.928 19.4598 17.368 20.1498 17.848 20.7898C19.798 20.1998 21.788 19.2698 23.848 17.7498C24.368 12.5998 23.018 8.16982 20.317 4.36982ZM8.518 15.2498C7.268 15.2498 6.248 14.0998 6.248 12.6998C6.248 11.2998 7.258 10.1498 8.518 10.1498C9.788 10.1498 10.808 11.2998 10.778 12.6998C10.778 14.0998 9.778 15.2498 8.518 15.2498ZM16.178 15.2498C14.928 15.2498 13.908 14.0998 13.908 12.6998C13.908 11.2998 14.918 10.1498 16.178 10.1498C17.448 10.1498 18.468 11.2998 18.438 12.6998C18.438 14.0998 17.438 15.2498 16.178 15.2498Z" />
+                    </svg>
+                    Login with Discord
                 </button>
             </div>
         );
