@@ -30,10 +30,8 @@ export async function GET(
             embed_title: 'Welcome!'
         };
 
-        // Ensure guild_id is a string to avoid precision loss in JSON
-        if (welcomeData.guild_id) {
-            welcomeData.guild_id = String(welcomeData.guild_id);
-        }
+        // Ensure guild_id is a string and use the exact string from the URL to avoid precision loss
+        welcomeData.guild_id = guildId;
 
         return NextResponse.json(welcomeData);
 
@@ -52,12 +50,9 @@ export async function PUT(
         const body = await req.json();
         console.log(`[Welcome API] PUT request for guildId: ${guildId}`, body);
 
-        // Validate guildId matches if provided in body
-        // Normalize both to strings to avoid type mismatch and BIGINT precision issues
-        if (body.guild_id && String(body.guild_id) !== String(guildId)) {
-            console.warn(`[Welcome API] Guild ID mismatch. Body: ${body.guild_id}, Params: ${guildId}`);
-            return NextResponse.json({ error: 'Guild ID mismatch', details: { body: body.guild_id, params: guildId } }, { status: 400 });
-        }
+        // Always override guild_id from params, discarding body's potentially precision-lost value
+        body.guild_id = guildId;
+
 
         const { data, error } = await supabase
             .from('welcome_configs')
@@ -78,9 +73,9 @@ export async function PUT(
             return NextResponse.json({ error: 'Failed to update welcome config' }, { status: 500 });
         }
 
-        // Return data with guild_id as string
-        if (data && data.guild_id) {
-            data.guild_id = String(data.guild_id);
+        // Always use original guildId from URL params to ensure perfect precision
+        if (data) {
+            data.guild_id = guildId;
         }
 
         return NextResponse.json(data);
