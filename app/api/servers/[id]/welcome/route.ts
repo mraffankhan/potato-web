@@ -7,6 +7,7 @@ export async function GET(
 ) {
     try {
         const { id: guildId } = await params;
+        console.log(`[Welcome API] GET request for guildId: ${guildId}`);
 
         const { data, error } = await supabase
             .from('welcome_configs')
@@ -15,7 +16,7 @@ export async function GET(
             .single();
 
         if (error && error.code !== 'PGRST116') { // PGRST116 is "No rows found"
-            console.error('Supabase error fetching welcome config:', error);
+            console.error('[Welcome API] Supabase error fetching welcome config:', error);
             return NextResponse.json({ error: 'Failed to fetch welcome config' }, { status: 500 });
         }
 
@@ -30,7 +31,7 @@ export async function GET(
         });
 
     } catch (error) {
-        console.error('Error fetching welcome config:', error);
+        console.error('[Welcome API] Error fetching welcome config:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
@@ -42,10 +43,13 @@ export async function PUT(
     try {
         const { id: guildId } = await params;
         const body = await req.json();
+        console.log(`[Welcome API] PUT request for guildId: ${guildId}`, body);
 
         // Validate guildId matches
-        if (body.guild_id && body.guild_id !== guildId) {
-            return NextResponse.json({ error: 'Guild ID mismatch' }, { status: 400 });
+        // Normalize both to strings to avoid type mismatch (BIGINT might come back as number)
+        if (body.guild_id && String(body.guild_id) !== String(guildId)) {
+            console.warn(`[Welcome API] Guild ID mismatch. Body: ${body.guild_id}, Params: ${guildId}`);
+            return NextResponse.json({ error: 'Guild ID mismatch', details: { body: body.guild_id, params: guildId } }, { status: 400 });
         }
 
         const { data, error } = await supabase
@@ -63,14 +67,14 @@ export async function PUT(
             .single();
 
         if (error) {
-            console.error('Supabase error updating welcome config:', error);
+            console.error('[Welcome API] Supabase error updating welcome config:', error);
             return NextResponse.json({ error: 'Failed to update welcome config' }, { status: 500 });
         }
 
         return NextResponse.json(data);
 
     } catch (error) {
-        console.error('Error updating welcome config:', error);
+        console.error('[Welcome API] Error updating welcome config:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
