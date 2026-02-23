@@ -7,7 +7,7 @@ import Link from "next/link";
 import {
     Loader2, ArrowLeft, Trophy, Plus, X, Hash,
     Users, MessageSquare, Shield, CheckCircle2, AlertCircle,
-    Swords, Clock, Sparkles, Star, Crown
+    Swords, Clock, Sparkles, Star, Crown, Ticket, Lock, Unlock
 } from "lucide-react";
 
 interface Channel {
@@ -49,9 +49,30 @@ interface Plan {
     name: string;
     description: string;
     price: number;
-    duration: string; // duration interval string from postgres
+    duration: string;
 }
 
+interface TicketItem {
+    id: number;
+    channel_id: string;
+    opener_id: string;
+    config_id: number;
+    opened_at: string;
+    closed_at: string | null;
+    closed_by: string | null;
+    reason: string | null;
+    panel_title: string;
+}
+
+interface TicketConfigInfo {
+    id: number;
+    title: string;
+    channel_id: string;
+    category_id: string | null;
+    support_role_id: string | null;
+    log_channel_id: string | null;
+    max_tickets: number;
+}
 
 interface GuildPremium {
     is_premium: boolean;
@@ -68,6 +89,8 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
     const { id: guildId } = use(params);
     const [tournaments, setTournaments] = useState<Tournament[]>([]);
     const [scrims, setScrims] = useState<Scrim[]>([]);
+    const [tickets, setTickets] = useState<TicketItem[]>([]);
+    const [ticketConfigs, setTicketConfigs] = useState<TicketConfigInfo[]>([]);
     const [channels, setChannels] = useState<Channel[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
     const [plans, setPlans] = useState<Plan[]>([]);
@@ -76,7 +99,9 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
 
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<any>(null);
-    const [activeTab, setActiveTab] = useState<"tournaments" | "scrims" | "premium">("tournaments");
+    const [activeTab, setActiveTab] = useState<"tournaments" | "scrims" | "tickets" | "premium">("tournaments");
+    const [closingTicketId, setClosingTicketId] = useState<number | null>(null);
+    const [ticketFilter, setTicketFilter] = useState<"all" | "open" | "closed">("all");
 
     // UI State
     const [showForm, setShowForm] = useState(false);
@@ -113,12 +138,13 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
             setUser(session.user);
 
             // Fetch all data in parallel
-            const [tourneysRes, scrimsRes, channelsRes, rolesRes, premiumRes] = await Promise.all([
+            const [tourneysRes, scrimsRes, channelsRes, rolesRes, premiumRes, ticketsRes] = await Promise.all([
                 fetch(`/api/servers/${guildId}/tournaments`),
                 fetch(`/api/servers/${guildId}/scrims`),
                 fetch(`/api/servers/${guildId}/channels`),
                 fetch(`/api/servers/${guildId}/roles`),
                 fetch(`/api/servers/${guildId}/premium?userId=${session.user.id}`),
+                fetch(`/api/servers/${guildId}/tickets`),
             ]);
 
             if (tourneysRes.ok && isMounted) setTournaments(await tourneysRes.json());
@@ -136,6 +162,11 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
                 setGuildPremium(data.guild);
                 setUserPremium(data.user);
                 setPlans(data.plans || []);
+            }
+            if (ticketsRes.ok && isMounted) {
+                const data = await ticketsRes.json();
+                setTickets(data.tickets || []);
+                setTicketConfigs(data.configs || []);
             }
 
             if (isMounted) setLoading(false);
@@ -348,7 +379,7 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
                                 </span>
                             )}
                         </div>
-                        <p className="text-gray-500 text-sm mt-0.5">Manage tournaments, scrims, and premium features</p>
+                        <p className="text-gray-500 text-sm mt-0.5">Manage tournaments, scrims, tickets, and premium features</p>
                     </div>
                 </div>
 
@@ -378,6 +409,19 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
                         Scrims
                         <span className={`text-xs ml-1 px-1.5 py-0.5 rounded-full ${activeTab === "scrims" ? "bg-black/20" : "bg-white/10"}`}>
                             {scrims.length}
+                        </span>
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("tickets")}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === "tickets"
+                            ? "bg-primary text-black shadow-lg shadow-primary/20"
+                            : "text-gray-400 hover:text-white hover:bg-white/5"
+                            }`}
+                    >
+                        <Ticket size={16} />
+                        Tickets
+                        <span className={`text-xs ml-1 px-1.5 py-0.5 rounded-full ${activeTab === "tickets" ? "bg-black/20" : "bg-white/10"}`}>
+                            {tickets.length}
                         </span>
                     </button>
                     <button
@@ -549,6 +593,217 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
                                     ))}
                                 </div>
                             )}
+                        </>
+                    )}
+
+                    {activeTab === "tickets" && (
+                        <>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-bold flex items-center gap-2">
+                                    <Ticket className="text-primary" size={22} />
+                                    Support Tickets
+                                </h2>
+                                <div className="flex items-center gap-2">
+                                    {(["all", "open", "closed"] as const).map((f) => (
+                                        <button
+                                            key={f}
+                                            onClick={() => setTicketFilter(f)}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize ${ticketFilter === f
+                                                    ? "bg-primary text-black"
+                                                    : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"
+                                                }`}
+                                        >
+                                            {f}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Ticket Config Summary */}
+                            {ticketConfigs.length > 0 && (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+                                    {ticketConfigs.map((cfg) => {
+                                        const openCount = tickets.filter(t => t.config_id === cfg.id && !t.closed_at).length;
+                                        const totalCount = tickets.filter(t => t.config_id === cfg.id).length;
+                                        return (
+                                            <div key={cfg.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-3">
+                                                <div className="p-2 bg-primary/10 rounded-lg">
+                                                    <Ticket size={18} className="text-primary" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-bold text-white truncate">{cfg.title}</p>
+                                                    <p className="text-xs text-gray-400">
+                                                        {openCount} open · {totalCount} total · max {cfg.max_tickets}/user
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {(() => {
+                                const filtered = tickets.filter(t => {
+                                    if (ticketFilter === "open") return !t.closed_at;
+                                    if (ticketFilter === "closed") return !!t.closed_at;
+                                    return true;
+                                });
+
+                                if (filtered.length === 0) {
+                                    return (
+                                        <div className="text-center py-16 bg-white/5 rounded-2xl border border-white/10">
+                                            <Ticket size={48} className="mx-auto text-white/20 mb-4" />
+                                            <h3 className="text-lg font-bold mb-2">
+                                                {ticketFilter === "all" ? "No Tickets Yet" : `No ${ticketFilter} tickets`}
+                                            </h3>
+                                            <p className="text-gray-500 text-sm">
+                                                {ticketFilter === "all"
+                                                    ? "Tickets created via the bot will appear here."
+                                                    : `There are no ${ticketFilter} tickets at the moment.`}
+                                            </p>
+                                        </div>
+                                    );
+                                }
+
+                                return (
+                                    <div className="grid gap-3">
+                                        {filtered.map((t, index) => {
+                                            const isOpen = !t.closed_at;
+                                            return (
+                                                <div
+                                                    key={t.id}
+                                                    className={`bg-white/5 border rounded-xl p-5 transition-all group ${isOpen
+                                                            ? "border-green-500/20 hover:border-green-500/40"
+                                                            : "border-white/10 hover:border-white/20 opacity-70"
+                                                        }`}
+                                                    style={{ animationDelay: `${index * 40}ms` }}
+                                                >
+                                                    <div className="flex items-start justify-between gap-4">
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-center gap-3 mb-2 flex-wrap">
+                                                                <h3 className="text-lg font-bold truncate group-hover:text-primary transition-colors">
+                                                                    Ticket #{t.id}
+                                                                </h3>
+                                                                {isOpen ? (
+                                                                    <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 flex items-center gap-1 shrink-0">
+                                                                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                                                                        Open
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 flex items-center gap-1 shrink-0">
+                                                                        <Lock size={10} />
+                                                                        Closed
+                                                                    </span>
+                                                                )}
+                                                                <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 shrink-0">
+                                                                    {t.panel_title}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+                                                                <span className="flex items-center gap-1.5">
+                                                                    <Users size={14} className="text-primary/60" />
+                                                                    Opener: {t.opener_id}
+                                                                </span>
+                                                                <span className="flex items-center gap-1.5">
+                                                                    <Clock size={14} className="text-primary/60" />
+                                                                    {new Date(t.opened_at).toLocaleString()}
+                                                                </span>
+                                                                {t.reason && (
+                                                                    <span className="flex items-center gap-1.5">
+                                                                        <MessageSquare size={14} className="text-primary/60" />
+                                                                        {t.reason}
+                                                                    </span>
+                                                                )}
+                                                                {t.closed_at && (
+                                                                    <span className="flex items-center gap-1.5 text-red-400/70">
+                                                                        <Lock size={14} />
+                                                                        Closed: {new Date(t.closed_at).toLocaleString()}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="shrink-0 flex gap-2">
+                                                            {isOpen ? (
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        setClosingTicketId(t.id);
+                                                                        try {
+                                                                            const res = await fetch(`/api/servers/${guildId}/tickets`, {
+                                                                                method: "PATCH",
+                                                                                headers: { "Content-Type": "application/json" },
+                                                                                body: JSON.stringify({
+                                                                                    ticketId: t.id,
+                                                                                    action: "close",
+                                                                                    userId: user?.user_metadata?.provider_id,
+                                                                                }),
+                                                                            });
+                                                                            if (res.ok) {
+                                                                                const data = await res.json();
+                                                                                setTickets(prev => prev.map(tk => tk.id === t.id ? { ...tk, ...data.ticket, panel_title: tk.panel_title } : tk));
+                                                                                showToast("success", `Ticket #${t.id} closed.`);
+                                                                            } else {
+                                                                                showToast("error", "Failed to close ticket.");
+                                                                            }
+                                                                        } catch {
+                                                                            showToast("error", "Network error.");
+                                                                        }
+                                                                        setClosingTicketId(null);
+                                                                    }}
+                                                                    disabled={closingTicketId === t.id}
+                                                                    className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/20 font-medium rounded-lg text-sm transition-all"
+                                                                >
+                                                                    {closingTicketId === t.id ? (
+                                                                        <Loader2 size={14} className="animate-spin" />
+                                                                    ) : (
+                                                                        <Lock size={14} />
+                                                                    )}
+                                                                    Close
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        setClosingTicketId(t.id);
+                                                                        try {
+                                                                            const res = await fetch(`/api/servers/${guildId}/tickets`, {
+                                                                                method: "PATCH",
+                                                                                headers: { "Content-Type": "application/json" },
+                                                                                body: JSON.stringify({
+                                                                                    ticketId: t.id,
+                                                                                    action: "reopen",
+                                                                                    userId: user?.user_metadata?.provider_id,
+                                                                                }),
+                                                                            });
+                                                                            if (res.ok) {
+                                                                                const data = await res.json();
+                                                                                setTickets(prev => prev.map(tk => tk.id === t.id ? { ...tk, ...data.ticket, panel_title: tk.panel_title } : tk));
+                                                                                showToast("success", `Ticket #${t.id} reopened.`);
+                                                                            } else {
+                                                                                showToast("error", "Failed to reopen ticket.");
+                                                                            }
+                                                                        } catch {
+                                                                            showToast("error", "Network error.");
+                                                                        }
+                                                                        setClosingTicketId(null);
+                                                                    }}
+                                                                    disabled={closingTicketId === t.id}
+                                                                    className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-primary hover:text-black font-medium rounded-lg text-sm transition-all"
+                                                                >
+                                                                    {closingTicketId === t.id ? (
+                                                                        <Loader2 size={14} className="animate-spin" />
+                                                                    ) : (
+                                                                        <Unlock size={14} />
+                                                                    )}
+                                                                    Reopen
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                );
+                            })()}
                         </>
                     )}
 
