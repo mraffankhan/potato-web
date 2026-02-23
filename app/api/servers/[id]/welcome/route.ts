@@ -11,7 +11,8 @@ export async function GET(
 
         const { data, error } = await supabase
             .from('welcome_configs')
-            .select('*')
+            // Convert channel_id to text to avoid BIGINT precision loss in JS
+            .select('*, channel_id::text')
             .eq('guild_id', guildId)
             .single();
 
@@ -65,7 +66,7 @@ export async function PUT(
                 embed_color: body.embed_color,
                 embed_title: body.embed_title
             })
-            .select()
+            .select('*, channel_id::text')
             .single();
 
         if (error) {
