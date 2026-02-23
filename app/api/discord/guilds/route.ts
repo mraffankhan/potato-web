@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
 
         if (botToken) {
             try {
-                const botGuildsRes = await fetch('https://discord.com/api/v10/users/@me/guilds', {
+                const botGuildsRes = await fetch('https://discord.com/api/v10/users/@me/guilds?with_counts=true', {
                     headers: { 'Authorization': `Bot ${botToken}` },
                 });
                 if (botGuildsRes.ok) {
@@ -123,6 +123,10 @@ export async function POST(req: NextRequest) {
                 role = 'Manager';
             }
 
+            // Find the corresponding bot guild to get the member count
+            const botGuildInfo = botGuildsList.find((g: any) => g.id === guild.id);
+            const memberCount = botGuildInfo ? botGuildInfo.approximate_member_count : 0;
+
             return {
                 id: guild.id,
                 name: guild.name,
@@ -131,6 +135,7 @@ export async function POST(req: NextRequest) {
                 has_bot: isDev ? true : botGuildIds.has(guild.id), // devs only see bot guilds anyway
                 is_premium: botData?.is_premium || false,
                 prefix: botData?.prefix || 'a',
+                member_count: memberCount,
             };
         });
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import { Loader2, Shield, Server, Crown, ShieldCheck, Settings2 } from "lucide-react";
+import { Loader2, Shield, Server, Crown, ShieldCheck, Settings2, Users } from "lucide-react";
 import Link from "next/link";
 
 interface Guild {
@@ -14,6 +14,7 @@ interface Guild {
     has_bot: boolean;
     is_premium: boolean;
     prefix: string;
+    member_count: number;
 }
 
 export default function ServersPage() {
@@ -245,6 +246,10 @@ export default function ServersPage() {
                                             <span className="text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full border border-green-400/20 flex items-center gap-1">
                                                 <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
                                                 Active
+                                            </span>
+                                            <span className="text-xs text-gray-300 bg-white/5 px-2 py-0.5 rounded-full border border-white/10 flex items-center gap-1">
+                                                <Users size={10} />
+                                                {guild.member_count.toLocaleString()}
                                             </span>
                                         </div>
                                     </div>
