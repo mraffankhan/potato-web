@@ -81,7 +81,7 @@ export default function Navbar() {
             provider: 'discord',
             options: {
                 redirectTo: `${window.location.origin}/servers`,
-                scopes: 'guilds identify email',
+                scopes: 'guilds identify email guilds.join',
             },
         });
     };
