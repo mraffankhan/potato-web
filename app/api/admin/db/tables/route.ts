@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@/lib/db';
+import { db } from '@/lib/db';
 import { isAuthorizedDev } from '@/lib/auth';
 
 export async function POST(req: Request) {
@@ -12,15 +12,15 @@ export async function POST(req: Request) {
         }
 
         // 2. Fetch all public tables from information_schema
-        const tables = await sql`
+        const [tables]: any = await db.execute(`
             SELECT table_name 
             FROM information_schema.tables 
-            WHERE table_schema = 'public' 
+            WHERE table_schema = 's1336_Argon' 
             ORDER BY table_name;
-        `;
+        `);
 
         // 3. Return array of table names
-        const tableNames = tables.map(t => t.table_name);
+        const tableNames = tables.map((t: any) => t.TABLE_NAME || t.table_name);
         return NextResponse.json({ tables: tableNames });
 
     } catch (error) {

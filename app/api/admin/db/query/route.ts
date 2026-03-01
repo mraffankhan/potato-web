@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@/lib/db';
+import { db } from '@/lib/db';
 import { isAuthorizedDev } from '@/lib/auth';
 
 export async function POST(req: Request) {
@@ -15,31 +15,37 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Invalid table name.' }, { status: 400 });
         }
 
-        let result;
+        let result: any, fields: any;
 
-        // 2. Handle CRUD Operations securely via `postgres` module
+        // 2. Handle CRUD Operations securely via `mysql2` module
         switch (action) {
             case 'read':
-                // Safe table interpolation via sql() function
-                result = await sql`SELECT * FROM ${sql(table)} ORDER BY row_number() OVER () LIMIT 100 OFFSET ${payload?.offset || 0}`;
+                // Escape table name natively to avoid reserved word conflicts in MySQL
+                [result, fields] = await db.execute(`SELECT * FROM \`${table}\` LIMIT 100 OFFSET ?`, [payload?.offset || 0]);
                 break;
 
             case 'read_columns':
-                result = await sql`
+                [result, fields] = await db.execute(`
                     SELECT column_name, data_type 
                     FROM information_schema.columns 
-                    WHERE table_schema = 'public' AND table_name = ${table};
-                 `;
+                    WHERE table_schema = 's1336_Argon' AND table_name = ?
+                `, [table]);
                 break;
 
             case 'create':
                 const insertKeys = Object.keys(payload);
                 if (insertKeys.length === 0) throw new Error("No data provided");
 
-                // Using helper function for secure inserts
-                result = await sql`
-                    INSERT INTO ${sql(table)} ${sql(payload)} RETURNING *;
-                `;
+                const placeholders = insertKeys.map(() => '?').join(', ');
+                const cols = insertKeys.map(k => `\`${k}\``).join(', ');
+                const values = Object.values(payload);
+
+                [result, fields] = await db.execute(
+                    `INSERT INTO \`${table}\` (${cols}) VALUES (${placeholders})`,
+                    values as any[]
+                );
+
+                // MySQL doesn't natively support RETURNING *, so we just send success
                 break;
 
             case 'update':
@@ -48,12 +54,13 @@ export async function POST(req: Request) {
                     throw new Error("Invalid update payload");
                 }
 
-                result = await sql`
-                    UPDATE ${sql(table)} 
-                    SET ${sql(payload.data)} 
-                    WHERE ${sql(payload.idField)} = ${payload.idValue} 
-                    RETURNING *;
-                `;
+                const setCols = updateKeys.map(k => `\`${k}\` = ?`).join(', ');
+                const updateValues = [...Object.values(payload.data), payload.idValue];
+
+                [result, fields] = await db.execute(
+                    `UPDATE \`${table}\` SET ${setCols} WHERE \`${payload.idField}\` = ?`,
+                    updateValues as any[]
+                );
                 break;
 
             case 'delete':
@@ -61,10 +68,10 @@ export async function POST(req: Request) {
                     throw new Error("Invalid delete payload");
                 }
 
-                result = await sql`
-                    DELETE FROM ${sql(table)} 
-                    WHERE ${sql(payload.idField)} = ${payload.idValue};
-                 `;
+                [result, fields] = await db.execute(
+                    `DELETE FROM \`${table}\` WHERE \`${payload.idField}\` = ?`,
+                    [payload.idValue]
+                );
                 break;
 
             default:
