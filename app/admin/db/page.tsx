@@ -17,6 +17,7 @@ export default function AdminDatabasePage() {
     const [dataLoading, setDataLoading] = useState(false);
     const [user, setUser] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [storageStats, setStorageStats] = useState<{ usedBytes: number, totalBytes: number } | null>(null);
     const [page, setPage] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -64,6 +65,9 @@ export default function AdminDatabasePage() {
             if (data.error) throw new Error(data.error);
             setTables(data.tables || []);
             setFilteredTables(data.tables || []);
+            if (data.storage) {
+                setStorageStats(data.storage);
+            }
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -148,6 +152,14 @@ export default function AdminDatabasePage() {
         }
     };
 
+    const formatBytes = (bytes: number) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-black">
@@ -218,6 +230,27 @@ export default function AdminDatabasePage() {
                         <div className="text-center text-gray-500 py-4 text-sm italic">No tables found.</div>
                     )}
                 </div>
+                {/* Storage Widget */}
+                {storageStats && (
+                    <div className="p-4 border-t border-white/10 bg-gradient-to-t from-black/60 to-transparent mt-auto backdrop-blur-md">
+                        <div className="flex justify-between items-center mb-2.5">
+                            <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1.5"><Database size={12} /> Storage Usage</span>
+                            <span className="text-[10px] text-primary font-mono bg-primary/10 px-1.5 py-0.5 rounded border border-primary/20 shadow-[0_0_10px_rgba(var(--primary-rgb),0.2)]">
+                                {((storageStats.usedBytes / storageStats.totalBytes) * 100).toFixed(2)}%
+                            </span>
+                        </div>
+                        <div className="w-full bg-black/50 border border-white/5 h-2 rounded-full overflow-hidden mb-2 shadow-inner">
+                            <div
+                                className="bg-gradient-to-r from-primary/50 to-primary h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
+                                style={{ width: `${Math.max(1, Math.min(100, (storageStats.usedBytes / storageStats.totalBytes) * 100))}%` }}
+                            />
+                        </div>
+                        <div className="flex justify-between text-[11px] text-gray-500 font-mono">
+                            <span className="text-gray-400">{formatBytes(storageStats.usedBytes)}</span>
+                            <span>{formatBytes(storageStats.totalBytes)}</span>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Main Content Area (Data Viewer) */}
