@@ -6,7 +6,6 @@ export const db = mysql.createPool({
     database: 's1336_Argon',
     user: 'u1336_EGjFu4y4L9',
     password: 'H!0PZBvdZAb58+HZ+^QG.850',
-    ssl: { rejectUnauthorized: false },
     connectionLimit: 10,
     waitForConnections: true
 });
