@@ -42,10 +42,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true });
         } else {
             const errorData = await response.json().catch(() => ({}));
-            console.error('Discord join-support error:', response.status, errorData);
-            // Return 200 with success:false — don't forward Discord's status code
-            // (forwarding 404 makes browser think THIS route doesn't exist)
-            return NextResponse.json({ success: false, error: 'Could not join support server' });
+            console.error('Discord join error:', response.status, JSON.stringify(errorData));
+            const detail = errorData.message || errorData.code || 'Unknown Discord error';
+            return NextResponse.json({
+                success: false,
+                error: `Discord API error (${response.status}): ${detail}`
+            });
         }
 
     } catch (error) {
