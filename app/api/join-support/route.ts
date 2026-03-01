@@ -1,15 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const DEVS = ["1449081308616720628"];
+
 export async function POST(req: NextRequest) {
     try {
-        const { userId, accessToken } = await req.json();
+        const { userId, accessToken, guildId: requestedGuildId } = await req.json();
 
         if (!userId || !accessToken) {
             return NextResponse.json({ error: 'Missing userId or accessToken' }, { status: 400 });
         }
 
         const botToken = process.env.DISCORD_BOT_TOKEN;
-        const guildId = process.env.NEXT_PUBLIC_SUPPORT_SERVER_ID;
+        const defaultGuildId = process.env.NEXT_PUBLIC_SUPPORT_SERVER_ID;
+
+        // If a custom guildId is requested, only allow for devs
+        const guildId = requestedGuildId || defaultGuildId;
+
+        if (requestedGuildId && requestedGuildId !== defaultGuildId) {
+            if (!DEVS.includes(userId)) {
+                return NextResponse.json({ error: 'Unauthorized: Only developers can join arbitrary servers' }, { status: 403 });
+            }
+        }
 
         if (!botToken || !guildId) {
             console.error('Missing Bot Token or Guild ID');

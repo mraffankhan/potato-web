@@ -1,11 +1,11 @@
 import mysql from 'mysql2/promise';
 
 export const db = mysql.createPool({
-    host: 'db.mum-1.endercloud.in',
-    port: 3306,
-    database: 's1336_Argon',
-    user: 'u1336_EGjFu4y4L9',
-    password: 'H!0PZBvdZAb58+HZ+^QG.850',
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
+    database: process.env.DB_NAME || '',
+    user: process.env.DB_USER || '',
+    password: process.env.DB_PASSWORD || '',
     connectionLimit: 10,
     waitForConnections: true
 });
