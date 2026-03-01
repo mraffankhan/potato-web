@@ -11,7 +11,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized access.' }, { status: 403 });
         }
 
-        if (!table || !/^[a-zA-Z0-9_]+$/.test(table)) {
+        if (!table || !/^[a-zA-Z0-9_.]+$/.test(table)) {
             return NextResponse.json({ error: 'Invalid table name.' }, { status: 400 });
         }
 
