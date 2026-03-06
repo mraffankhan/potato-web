@@ -101,6 +101,7 @@ export default function Navbar() {
                             <NavLink href="/servers">DASHBOARD</NavLink>
                             <NavLink href="/tournaments">TOURNAMENTS</NavLink>
                             <NavLink href="/premium">PREMIUM</NavLink>
+                            <NavLink href="/commands">COMMANDS</NavLink>
                             <NavLink href="/get">GET</NavLink>
                             {user && ["1449081308616720628"].includes(user?.user_metadata?.provider_id) && (
                                 <NavLink href="/admin/db">DATABASE</NavLink>
@@ -166,6 +167,7 @@ export default function Navbar() {
                         <MobileNavLink href="/servers" onClick={() => setIsOpen(false)}>DASHBOARD</MobileNavLink>
                         <MobileNavLink href="/tournaments" onClick={() => setIsOpen(false)}>TOURNAMENTS</MobileNavLink>
                         <MobileNavLink href="/premium" onClick={() => setIsOpen(false)}>PREMIUM</MobileNavLink>
+                        <MobileNavLink href="/commands" onClick={() => setIsOpen(false)}>COMMANDS</MobileNavLink>
                         <MobileNavLink href="/get" onClick={() => setIsOpen(false)}>GET</MobileNavLink>
                         {user && ["1449081308616720628"].includes(user?.user_metadata?.provider_id) && (
                             <MobileNavLink href="/admin/db" onClick={() => setIsOpen(false)}>DATABASE</MobileNavLink>
