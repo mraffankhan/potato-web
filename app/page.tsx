@@ -1,10 +1,34 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Zap, Bot, Users, Activity, Command, Shield, Server, Box, Terminal, Globe } from "lucide-react";
+import { ArrowRight, Trophy, Swords, Ticket, Database, UserPlus, Crown, Shield, Server, Box, Terminal } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
+  const [stats, setStats] = useState({
+    commands: "0",
+    users: "0",
+    servers: "0",
+    uptime: "99.9%"
+  });
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) {
+          setStats({
+            commands: data.commands.toLocaleString(),
+            users: data.users.toLocaleString(),
+            servers: data.servers.toLocaleString(),
+            uptime: data.uptime
+          });
+        }
+      })
+      .catch(err => console.error("Failed to fetch stats", err));
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/* Hero Section */}
@@ -46,7 +70,7 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Powerful moderation, uncompromised security, and absolute automation for your growing community. Level up your server today.
+            Powerful esports management, complete tournament automation, and advanced ticket support for your growing community.
           </motion.p>
 
           <motion.div
@@ -107,10 +131,10 @@ export default function Home() {
       {/* Stats Section */}
       <section className="py-12 border-y border-white/5 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
-          <StatCard title="Uptime" value="99.9%" />
-          <StatCard title="Commands" value="300+" />
-          <StatCard title="Users Active" value="1M+" />
-          <StatCard title="Servers" value="1,000+" />
+          <StatCard title="Uptime" value={stats.uptime} />
+          <StatCard title="Commands" value={stats.commands} />
+          <StatCard title="Users Active" value={stats.users} />
+          <StatCard title="Servers" value={stats.servers} />
         </div>
       </section>
 
@@ -124,34 +148,34 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FeatureCard
-              icon={<ShieldCheck size={28} />}
-              title="Anti-Nuke System"
-              description="Zero-tolerance, automated security to protect your structural integrity from rogue tokens and admins."
+              icon={<Trophy size={28} />}
+              title="Esports Tournaments"
+              description="Create, manage, and automate bracket systems and full-scale tournaments securely via dashboard."
             />
             <FeatureCard
-              icon={<Activity size={28} />}
-              title="Advanced Moderation"
-              description="Deep-clean purging, precise warning systems, and auto-moderation for a toxic-free chat."
+              icon={<Swords size={28} />}
+              title="Scrims Organization"
+              description="Host robust daily scrims with auto-slotlists, mention requirements, and role ping automations."
             />
             <FeatureCard
-              icon={<Bot size={28} />}
-              title="AI Automation"
-              description="Automate ticketing, intelligent responses, and esports tournament management dynamically."
+              icon={<Ticket size={28} />}
+              title="Interactive Ticketing"
+              description="Create custom support panels with interactive buttons, live transcripts, and per-user limits to handle inquiries."
             />
             <FeatureCard
-              icon={<Shield size={28} />}
-              title="Security Protection"
-              description="Lockdown integrations, maintenance modes, and strict role hierarchy enforcement."
+              icon={<Database size={28} />}
+              title="Scale & Stability"
+              description="Built on top of a highly optimized persistent database ensuring extremely fast queries and no data loss."
             />
             <FeatureCard
-              icon={<Command size={28} />}
-              title="Custom Commands"
-              description="Build your own interactive bots logic visually with custom triggers and dynamic variables."
+              icon={<UserPlus size={28} />}
+              title="Auto-Roles & Linking"
+              description="Easily grant roles on join automatically or manage dedicated media partner integrations natively."
             />
             <FeatureCard
-              icon={<Globe size={28} />}
-              title="Server Analytics"
-              description="Track member retention, engagement rates, and message activity in real-time."
+              icon={<Crown size={28} />}
+              title="Premium Features"
+              description="Advanced premium tracking, guild enhancements, and an integrated system to take tournaments to the next level."
             />
           </div>
         </div>
