@@ -329,7 +329,7 @@ export default function ServerManagePage({ params }: { params: Promise<{ id: str
                             provider: 'discord',
                             options: {
                                 redirectTo: `${window.location.origin}/auth/callback`,
-                                scopes: 'identify guild.members.read guilds guilds.join',
+                                scopes: 'guilds identify email guilds.join',
                             },
                         });
                     }}

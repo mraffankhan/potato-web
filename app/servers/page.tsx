@@ -159,7 +159,7 @@ export default function ServersPage() {
                             provider: 'discord',
                             options: {
                                 redirectTo: `${window.location.origin}/auth/callback`,
-                                scopes: 'identify guild.members.read guilds guilds.join',
+                                scopes: 'guilds identify email guilds.join',
                             },
                         });
                     }}
