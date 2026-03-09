@@ -128,15 +128,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
-          <StatCard title="Uptime" value={stats.uptime} />
-          <StatCard title="Commands" value={stats.commands} />
-          <StatCard title="Users Active" value={stats.users} />
-          <StatCard title="Servers" value={stats.servers} />
-        </div>
-      </section>
+
 
       {/* Features Section */}
       <section id="features" className="py-32 relative">
@@ -181,19 +173,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Community Servers Section */}
+      {/* Community & Stats Section */}
       <section id="community" className="py-32 bg-black/50 border-y border-white/5 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">Trusted by massive communities.</h2>
-            <p className="text-gray-400 text-lg">Join thousands of large-scale discord servers using Argon every day.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">Powering huge communities.</h2>
+            <p className="text-gray-400 text-lg">Real-time statistics showing Argon's impact across Discord.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <ServerCard name="Global Esports" members="241k" online="12k" img="GE" />
-            <ServerCard name="Anime Central" members="1.2M" online="85k" img="AC" />
-            <ServerCard name="Developers Hub" members="150k" online="8k" img="DH" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-white/5 bg-white/[0.02] border border-white/5 rounded-3xl p-8 backdrop-blur-md shadow-2xl">
+            <StatCard title="Active Servers" value={stats.servers} />
+            <StatCard title="Commands Executed" value={stats.commands} />
+            <StatCard title="Total Users" value={stats.users} />
+            <StatCard title="Uptime" value={stats.uptime} />
           </div>
         </div>
       </section>
@@ -258,28 +251,4 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
   );
 }
 
-function ServerCard({ name, members, online, img }: { name: string; members: string; online: string; img: string }) {
-  return (
-    <div className="p-6 rounded-2xl border border-white/10 bg-black/60 backdrop-blur-lg flex items-center gap-4 hover:border-white/20 transition-colors group">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-xl flex-shrink-0 shadow-[0_0_15px_rgba(124,58,237,0.3)]">
-        {img}
-      </div>
-      <div>
-        <h4 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{name}</h4>
-        <div className="flex items-center gap-3 text-sm">
-          <span className="flex items-center gap-1.5 text-gray-400">
-            <span className="w-2 h-2 rounded-full bg-gray-500"></span>
-            {members}
-          </span>
-          <span className="flex items-center gap-1.5 text-gray-400">
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
-            {online} online
-          </span>
-        </div>
-        <div className="mt-2 text-xs font-semibold text-primary flex items-center gap-1 opacity-80">
-          <Shield size={12} /> Protected by Bot
-        </div>
-      </div>
-    </div>
-  );
-}
+
