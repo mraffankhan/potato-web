@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X, LogIn, Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { User as SupabaseUser } from "@supabase/supabase-js";
+import { User } from "@/lib/session";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
-    const [user, setUser] = useState<SupabaseUser | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [scrolled, setScrolled] = useState(false);
 
@@ -21,72 +20,41 @@ export default function Navbar() {
 
     useEffect(() => {
         const handleAuth = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user || null);
-            setLoading(false);
-
-            if (session?.provider_token) {
-                localStorage.setItem('discord_access_token', session.provider_token);
-            }
-
-            if (session?.user && session?.provider_token) {
-                try {
-                    await fetch('/api/join-support', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            userId: session.user.user_metadata.provider_id,
-                            accessToken: session.provider_token
-                        })
-                    });
-                } catch (e) {
-                    console.error("Auto-join error", e);
+            try {
+                const res = await fetch('/api/auth/me');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.authenticated && data.user) {
+                        setUser(data.user);
+                    } else {
+                        setUser(null);
+                    }
+                } else {
+                    setUser(null);
                 }
+            } catch (error) {
+                console.error("Failed to fetch user session", error);
+                setUser(null);
+            } finally {
+                setLoading(false);
             }
         };
 
         handleAuth();
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            setUser(session?.user || null);
-            if (session?.provider_token) {
-                localStorage.setItem('discord_access_token', session.provider_token);
-            }
-
-            if (session?.user && session?.provider_token && _event === 'SIGNED_IN') {
-                try {
-                    await fetch('/api/join-support', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            userId: session.user.user_metadata.provider_id,
-                            accessToken: session.provider_token
-                        })
-                    });
-                } catch (e) {
-                    console.error("Auto-join error", e);
-                }
-            }
-        });
-
-        return () => subscription.unsubscribe();
     }, []);
 
     const handleLogout = async () => {
-        localStorage.removeItem('discord_access_token');
-        await supabase.auth.signOut();
-        setUser(null);
-        setIsOpen(false);
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            setUser(null);
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to logout", error);
+        }
     };
 
-    const handleLogin = async () => {
-        await supabase.auth.signInWithOAuth({
-            provider: 'discord',
-            options: {
-                redirectTo: `${window.location.origin}/servers`,
-                scopes: 'guilds identify email guilds.join',
-            },
-        });
+    const handleLogin = () => {
+        window.location.href = '/api/auth/discord';
     };
 
     return (
@@ -112,7 +80,7 @@ export default function Navbar() {
                         <NavLink href="/servers">Dashboard</NavLink>
                         <NavLink href="/#community">Community</NavLink>
                         <NavLink href="/commands">Docs</NavLink>
-                        {user && ["1449081308616720628"].includes(user?.user_metadata?.provider_id) && (
+                        {user && ["1449081308616720628"].includes(user?.id) && (
                             <NavLink href="/admin/db">Database</NavLink>
                         )}
                     </div>
@@ -129,13 +97,13 @@ export default function Navbar() {
                             >
                                 <div className="w-7 h-7 rounded-full overflow-hidden">
                                     <img
-                                        src={user.user_metadata.avatar_url}
+                                        src={user.avatar || "/default-avatar.png"}
                                         alt="User"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <span className="text-sm font-medium text-gray-200 group-hover:text-white truncate max-w-[100px]">
-                                    {user.user_metadata.full_name?.split(' ')[0] || "User"}
+                                    {user.global_name?.split(' ')[0] || user.username}
                                 </span>
                             </Link>
                         ) : (
@@ -197,13 +165,13 @@ export default function Navbar() {
                                     <div className="flex flex-col items-center gap-4 mt-8 w-full pb-8 border-b border-white/10">
                                         <div className="w-20 h-20 rounded-full overflow-hidden border border-white/20">
                                             <img
-                                                src={user.user_metadata.avatar_url}
+                                                src={user.avatar || "/default-avatar.png"}
                                                 alt="User"
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
                                         <span className="text-xl font-bold text-white">
-                                            {user.user_metadata.full_name}
+                                            {user.global_name || user.username}
                                         </span>
                                         <button
                                             onClick={handleLogout}
