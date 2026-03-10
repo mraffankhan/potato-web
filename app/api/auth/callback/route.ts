@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
     const DISCORD_CLIENT_ID = (process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '1470031097357140063').trim();
     const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET?.trim();
     const REDIRECT_URI = process.env.NODE_ENV === 'production'
-        ? 'https://genzconnect.pro/api/auth/callback'
+        ? 'https://ravonixx.xyz/api/auth/callback'
         : 'http://localhost:3000/api/auth/callback';
 
     const url = new URL(req.url);

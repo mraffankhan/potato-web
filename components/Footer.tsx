@@ -60,7 +60,7 @@ export default function Footer() {
 
                 <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-gray-500 text-xs shadow-inner">
-                        © {new Date().getFullYear()} Argon Bot. All rights reserved. Not affiliated with Discord.
+                        © {new Date().getFullYear()} Argon Bot. Built by RAVONIXX. All rights reserved. Not affiliated with Discord.
                     </p>
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>

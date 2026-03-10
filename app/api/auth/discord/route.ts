@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 const DISCORD_CLIENT_ID = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '1470031097357140063';
 const DISCORD_OAUTH_URL = 'https://discord.com/api/oauth2/authorize';
 const REDIRECT_URI = process.env.NODE_ENV === 'production'
-    ? 'https://genzconnect.pro/api/auth/callback'
+    ? 'https://ravonixx.xyz/api/auth/callback'
     : 'http://localhost:3000/api/auth/callback';
 
 export async function GET() {

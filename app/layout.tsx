@@ -9,6 +9,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ARGON BOT | The Next Generation Discord Bot",
   description: "Powerful moderation, security and automation for your server.",
+  keywords: ["argon bot", "ravonix", "ravonix bot", "ravonixx", "discord bot", "discord moderation bot", "esports discord bot"],
+  authors: [{ name: "RAVONIXX", url: "https://ravonixx.xyz" }]
 };
 
 export default function RootLayout({
