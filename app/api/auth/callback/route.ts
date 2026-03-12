@@ -75,13 +75,16 @@ export async function GET(req: NextRequest) {
             ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
             : `https://cdn.discordapp.com/embed/avatars/${parseInt(userData.discriminator || '0') % 5}.png`;
 
+        console.log('--- USER DATA FROM DISCORD ---');
+        console.log(JSON.stringify(userData, null, 2));
+
         const { session, expires } = await createSession({
             user: {
-                id: userData.id,
-                username: userData.username,
+                id: userData.id || 'unknown_id',
+                username: userData.username || 'UnknownUser',
                 avatar: avatarUrl,
                 email: userData.email,
-                global_name: userData.global_name,
+                global_name: userData.global_name || userData.username || 'Unknown',
             },
             accessToken: access_token,
             expiresAt: Date.now() + expires_in * 1000,
