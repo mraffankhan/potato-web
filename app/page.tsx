@@ -96,12 +96,12 @@ export default function Home() {
             transition={{ delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-5"
           >
-            <Link
-              href="/api/auth/discord"
+            <button
+              onClick={() => window.location.href = '/api/auth/discord'}
               className="px-10 py-5 bg-white text-black font-black text-lg rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 group"
             >
               Start Building <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </button>
             <Link
               href="/docs"
               className="px-10 py-5 glass border border-white/10 text-white font-black text-lg rounded-2xl hover:bg-white/5 transition-all flex items-center justify-center gap-2"
