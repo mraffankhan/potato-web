@@ -10,11 +10,20 @@ import {
 import { motion } from "framer-motion";
 
 export default function Home() {
-  const [stats, setStats] = useState({
-    commands: 125430,
-    users: 45210,
-    servers: 1240,
-    uptime: "99.9%"
+  const [stats, setStats] = useState<{
+    commands: number | string;
+    users: number | string;
+    servers: number | string;
+    uptime: string;
+    loading: boolean;
+    error: boolean;
+  }>({
+    commands: 0,
+    users: 0,
+    servers: 0,
+    uptime: "99.9%",
+    loading: true,
+    error: false
   });
 
   useEffect(() => {
@@ -26,11 +35,18 @@ export default function Home() {
             commands: data.commands,
             users: data.users,
             servers: data.servers,
-            uptime: data.uptime
+            uptime: data.uptime,
+            loading: false,
+            error: false
           });
+        } else {
+          setStats(prev => ({ ...prev, loading: false, error: true }));
         }
       })
-      .catch(err => console.error("Failed to fetch stats", err));
+      .catch(err => {
+        console.error("Failed to fetch stats", err);
+        setStats(prev => ({ ...prev, loading: false, error: true }));
+      });
   }, []);
 
   return (
@@ -53,7 +69,7 @@ export default function Home() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            <span>Argon v2.0 Platform is Live</span>
+            <span>Platform is Live & Scaleable</span>
           </motion.div>
 
           <motion.h1 
@@ -62,8 +78,7 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 tracking-tighter italic uppercase leading-[1.1] text-white"
           >
-            Elite <span className="text-gradient">Esports</span><br />
-            Automation
+            RAVONIXX <span className="text-gradient">DEVELOPMENT</span>
           </motion.h1>
 
           <motion.p
@@ -82,7 +97,7 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-5"
           >
             <Link
-              href="/auth/signup"
+              href="/api/auth/discord"
               className="px-10 py-5 bg-white text-black font-black text-lg rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 group"
             >
               Start Building <ArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -137,10 +152,23 @@ export default function Home() {
       <section className="py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard title="Total Users" value={stats.users.toLocaleString()} prefix="+" />
-            <StatCard title="Guilds Active" value={stats.servers.toLocaleString()} prefix="" />
-            <StatCard title="Global Commands" value={stats.commands.toLocaleString()} prefix="" />
-            <StatCard title="System Uptime" value={stats.uptime} prefix="" />
+            <StatCard 
+              title="Total Users" 
+              value={stats.error ? "Data unavailable" : stats.loading ? "Loading..." : stats.users.toLocaleString()} 
+              prefix={!stats.loading && !stats.error ? "+" : ""} 
+            />
+            <StatCard 
+              title="Guilds Active" 
+              value={stats.error ? "Data unavailable" : stats.loading ? "Loading..." : stats.servers.toLocaleString()} 
+            />
+            <StatCard 
+              title="Global Commands" 
+              value={stats.error ? "Data unavailable" : stats.loading ? "Loading..." : stats.commands.toLocaleString()} 
+            />
+            <StatCard 
+              title="System Uptime" 
+              value={stats.uptime} 
+            />
           </div>
         </div>
       </section>

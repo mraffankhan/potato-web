@@ -25,7 +25,7 @@ export default function Refund() {
       <section className="space-y-4">
         <h2 className="text-3xl font-bold uppercase italic tracking-tight">3. Contact for Refund</h2>
         <p className="text-lg leading-relaxed font-medium">
-          To request a refund, please open a support ticket on our official Discord server or email us at support@argon.gg with your transaction ID and reason for the request.
+          To request a refund, please open a support ticket on our official Discord server or email us at <a href="mailto:ravonixx.contact@gmail.com" className="text-primary hover:underline">ravonixx.contact@gmail.com</a> with your transaction ID and reason for the request.
         </p>
       </section>
     </>

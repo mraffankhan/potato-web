@@ -46,7 +46,7 @@ export default function Footer() {
                             <div className="w-8 h-8 rounded-lg glass flex items-center justify-center">
                                 <img src="/R_logo.png" alt="Logo" className="w-6 h-6 object-contain" />
                             </div>
-                            <span className="text-xl font-bold tracking-tight text-white uppercase italic">Argon</span>
+                            <span className="text-xl font-bold tracking-tight text-white uppercase italic">Ravonixx</span>
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
                             The next generation of Discord-driven esports automation. Manage tournaments, scrims, and communities with ease.
@@ -80,7 +80,7 @@ export default function Footer() {
 
                 <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-gray-500 text-xs">
-                        &copy; {new Date().getFullYear()} Argon Platform. All rights reserved.
+                        &copy; {new Date().getFullYear()} Ravonixx Development. All rights reserved.
                     </p>
                     <div className="flex items-center gap-6">
                         <span className="flex items-center gap-1.5 text-xs text-green-500/80 font-medium">
