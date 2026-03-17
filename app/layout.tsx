@@ -18,10 +18,10 @@ export const metadata: Metadata = {
     siteName: "Ravonixx",
     images: [
       {
-        url: "/og-image.png",
+        url: "/R_logo.png",
         width: 1200,
         height: 630,
-        alt: "Argon Esports Platform",
+        alt: "Ravonixx Esports Platform",
       },
     ],
     locale: "en_US",
@@ -29,15 +29,15 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ARGON | Elite Esports Management",
+    title: "RAVONIXX | Elite Esports Management",
     description: "The next generation of Discord-driven esports automation.",
-    images: ["/og-image.png"],
-    creator: "@argonbot",
+    images: ["/R_logo.png"],
+    creator: "@ravonixx",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: "/R_logo.png",
+    shortcut: "/R_logo.png",
+    apple: "/R_logo.png",
   },
 };
 
