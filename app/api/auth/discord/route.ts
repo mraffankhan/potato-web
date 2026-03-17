@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const DISCORD_CLIENT_ID = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '1470031097357140063';
-const DISCORD_OAUTH_URL = 'https://discord.com/api/oauth2/authorize';
+const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize';
 const REDIRECT_URI = process.env.NODE_ENV === 'production'
     ? 'https://ravonixx.xyz/api/auth/callback'
     : 'http://localhost:3000/api/auth/callback';
