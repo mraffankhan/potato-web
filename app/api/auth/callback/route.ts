@@ -64,8 +64,9 @@ export async function GET(req: NextRequest) {
         });
 
         if (!userResponse.ok) {
-            console.error('Failed to fetch user profile');
-            return NextResponse.redirect(new URL('/?error=profile_failed', req.url));
+            const userDataError = await userResponse.json().catch(() => ({}));
+            console.error('Failed to fetch user profile:', userDataError);
+            return NextResponse.redirect(new URL(`/?error=profile_failed&details=${encodeURIComponent(JSON.stringify(userDataError))}`, req.url));
         }
 
         const userData = await userResponse.json();
