@@ -7,10 +7,15 @@ const REDIRECT_URI = process.env.NODE_ENV === 'production'
     : 'http://localhost:3000/api/auth/callback';
 
 export async function GET() {
-    const scope = encodeURIComponent('identify guilds email guilds.join');
-    const redirectUri = encodeURIComponent(REDIRECT_URI);
+    const clientId = DISCORD_CLIENT_ID.trim();
+    const scope = 'identify guilds email guilds.join';
+    const redirectUri = REDIRECT_URI.trim();
 
-    const authUrl = `${DISCORD_OAUTH_URL}?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+    const authUrl = new URL(DISCORD_OAUTH_URL);
+    authUrl.searchParams.set('client_id', clientId);
+    authUrl.searchParams.set('redirect_uri', redirectUri);
+    authUrl.searchParams.set('response_type', 'code');
+    authUrl.searchParams.set('scope', scope);
 
-    return NextResponse.redirect(authUrl);
+    return NextResponse.redirect(authUrl.toString());
 }
