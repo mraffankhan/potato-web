@@ -6,6 +6,8 @@ const REDIRECT_URI = (process.env.NODE_ENV === 'production'
     ? 'https://ravonixx.xyz/api/auth/callback'
     : 'http://localhost:3000/api/auth/callback').trim();
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
     const clientId = DISCORD_CLIENT_ID.trim();
     const scope = 'identify email guilds'; // Required scopes: identify, email, guilds
