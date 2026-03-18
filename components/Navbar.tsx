@@ -175,6 +175,13 @@ export default function Navbar() {
                                                 <div className="text-gray-400 text-sm">Active Session</div>
                                             </div>
                                         </div>
+                                        <Link 
+                                            href="/servers"
+                                            onClick={() => setIsOpen(false)}
+                                            className="w-full py-4 rounded-2xl bg-primary/10 hover:bg-primary/20 text-primary font-bold text-center border border-primary/20 transition-colors"
+                                        >
+                                            Go to Dashboard
+                                        </Link>
                                         <button onClick={handleLogout} className="w-full py-4 rounded-2xl bg-red-500/10 text-red-400 font-bold border border-red-500/20">Sign Out</button>
                                     </>
                                 ) : (
