@@ -76,7 +76,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 tracking-tighter italic uppercase leading-[1.1] text-white"
+            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black mb-8 tracking-tighter italic uppercase leading-[1.1] text-white"
           >
             RAVONIXX <span className="text-gradient">DEVELOPMENT</span>
           </motion.h1>
@@ -98,13 +98,13 @@ export default function Home() {
           >
             <button
               onClick={() => window.location.href = '/api/auth/discord'}
-              className="px-10 py-5 bg-white text-black font-black text-lg rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 group"
+              className="px-8 py-4 sm:px-10 sm:py-5 bg-white text-black font-black text-lg rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 group w-full sm:w-auto"
             >
               Start Building <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
             <Link
               href="/docs"
-              className="px-10 py-5 glass border border-white/10 text-white font-black text-lg rounded-2xl hover:bg-white/5 transition-all flex items-center justify-center gap-2"
+              className="px-8 py-4 sm:px-10 sm:py-5 glass border border-white/10 text-white font-black text-lg rounded-2xl hover:bg-white/5 transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <Terminal size={20} /> View Docs
             </Link>
@@ -249,11 +249,11 @@ export default function Home() {
       <section className="py-40 relative overflow-hidden">
         <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <h2 className="text-4xl md:text-7xl font-black text-white italic uppercase tracking-tighter mb-8 italic leading-tight">Ready to <span className="text-gradient">Elevate</span> Your Community?</h2>
+          <h2 className="text-4xl md:text-7xl font-black text-white italic uppercase tracking-tighter mb-8 leading-tight">Ready to <span className="text-gradient">Elevate</span> Your Community?</h2>
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Join thousands of servers already using Argon to automate their growth and competitive play.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <Link href="/get" className="px-10 py-5 bg-white text-black font-black text-lg rounded-2xl hover:scale-105 transition-all">Add to Discord</Link>
-             <Link href="/community" className="px-10 py-5 glass border border-white/10 text-white font-black text-lg rounded-2xl hover:bg-white/5 transition-all">Join Community</Link>
+             <Link href="/get" className="px-10 py-5 bg-white text-black font-black text-lg rounded-2xl hover:scale-105 transition-all w-full sm:w-auto">Add to Discord</Link>
+             <Link href="/community" className="px-10 py-5 glass border border-white/10 text-white font-black text-lg rounded-2xl hover:bg-white/5 transition-all w-full sm:w-auto">Join Community</Link>
           </div>
         </div>
       </section>
