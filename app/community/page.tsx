@@ -53,9 +53,9 @@ export default function CommunityPage() {
                         <p className="text-gray-400 leading-relaxed mb-6">
                             Participate in official Ravonixx tournaments and community events to win exclusive prizes and roles.
                         </p>
-                        <Link href="/tournaments" className="inline-flex items-center text-primary hover:text-white font-bold transition-colors">
-                            Find Tournaments <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                        <a href="https://discord.gg/XQkjvCfTv2" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-primary hover:text-white font-bold transition-colors">
+                            Find Events in Discord <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                        </a>
                     </div>
 
                     <div className="glass p-8 rounded-3xl border border-white/5 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(var(--primary-color-rgb),0.15)] transition-all duration-300 group relative overflow-hidden">

@@ -115,7 +115,7 @@ export default function DocsPage() {
             </h1>
 
             <div className="prose prose-invert prose-p:text-gray-400 prose-headings:text-white prose-a:text-primary max-w-none">
-              <TabContent tab={activeTab} />
+              <TabContent tab={activeTab} setActiveTab={setActiveTab} />
             </div>
 
             <div className="mt-24 pt-10 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center text-sm font-medium gap-6">
@@ -132,7 +132,7 @@ export default function DocsPage() {
 }
 
 // Content Router
-function TabContent({ tab }: { tab: string }) {
+function TabContent({ tab, setActiveTab }: { tab: string, setActiveTab: (tab: string) => void }) {
     switch (tab) {
         case "Introduction":
             return (
@@ -145,11 +145,13 @@ function TabContent({ tab }: { tab: string }) {
                             icon={<Terminal size={24} />} 
                             title="Quick Setup" 
                             desc="Get your bot up and running in your server in less than 5 minutes." 
+                            onClick={() => setActiveTab("Quick Start")}
                         />
                         <DocsCard 
                             icon={<Code size={24} />} 
                             title="API Guides" 
                             desc="Detailed documentation for integrating our API into your custom dashboards." 
+                            onClick={() => window.location.href = '/docs/api'}
                         />
                     </div>
                     <div className="h-px bg-white/5 my-12" />
@@ -289,9 +291,12 @@ function TabContent({ tab }: { tab: string }) {
     }
 }
 
-function DocsCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string; }) {
+function DocsCard({ icon, title, desc, onClick }: { icon: React.ReactNode; title: string; desc: string; onClick?: () => void; }) {
     return (
-        <div className="flex flex-col p-8 rounded-3xl glass border border-white/5 hover:border-primary/30 transition-all duration-300 group bg-gradient-to-b from-white/[0.03] to-transparent cursor-pointer hover:shadow-[0_0_30px_rgba(var(--primary-color-rgb),0.1)] relative overflow-hidden">
+        <div 
+            onClick={onClick}
+            className="flex flex-col p-8 rounded-3xl glass border border-white/5 hover:border-primary/30 transition-all duration-300 group bg-gradient-to-b from-white/[0.03] to-transparent cursor-pointer hover:shadow-[0_0_30px_rgba(var(--primary-color-rgb),0.1)] relative overflow-hidden"
+        >
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[50px] group-hover:bg-primary/10 transition-colors" />
             <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-primary mb-6 ring-1 ring-white/10 group-hover:scale-110 group-hover:bg-primary/10 transition-transform relative z-10 shadow-lg">
                 {icon}

@@ -19,6 +19,17 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [isOpen]);
+
+    useEffect(() => {
         const handleAuth = async () => {
             try {
                 const res = await fetch('/api/auth/me');
@@ -58,9 +69,10 @@ export default function Navbar() {
     };
 
     return (
+        <>
         <header 
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                scrolled ? "bg-black/60 backdrop-blur-xl border-b border-white/5 py-3" : "bg-transparent py-5"
+                scrolled ? "bg-black/95 md:bg-black/60 backdrop-blur-xl border-b border-white/5 py-3" : "bg-transparent py-5"
             }`}
         >
             <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -74,8 +86,8 @@ export default function Navbar() {
 
                     <div className="hidden md:flex items-center gap-8">
                         <NavLink href="/#features">Features</NavLink>
-                        <NavLink href="/tournaments">Tournaments</NavLink>
                         <NavLink href="/docs">Docs</NavLink>
+                        <NavLink href="/docs/api">API</NavLink>
                         <NavLink href="/premium" icon={<Trophy size={14} className="text-amber-400" />}>Premium</NavLink>
                     </div>
                 </div>
@@ -135,6 +147,7 @@ export default function Navbar() {
                     </button>
                 </div>
             </nav>
+        </header>
 
             <AnimatePresence>
                 {isOpen && (
@@ -142,9 +155,9 @@ export default function Navbar() {
                         initial={{ opacity: 0, x: "100%" }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
-                        className="fixed inset-0 z-[60] glass-darker md:hidden"
+                        className="fixed inset-0 z-[60] bg-black/95 md:hidden"
                     >
-                        <div className="flex flex-col h-full p-6">
+                        <div className="flex flex-col h-full p-6 overflow-y-auto">
                             <div className="flex justify-between items-center mb-12">
                                 <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
                                     <img src="/R_logo.png" alt="Logo" className="w-8 h-8 rounded-lg" />
@@ -160,20 +173,24 @@ export default function Navbar() {
 
                             <div className="flex flex-col gap-6">
                                 <MobileNavLink href="/#features" onClick={() => setIsOpen(false)}>Features</MobileNavLink>
-                                <MobileNavLink href="/tournaments" onClick={() => setIsOpen(false)}>Tournaments</MobileNavLink>
                                 <MobileNavLink href="/docs" onClick={() => setIsOpen(false)}>Documentation</MobileNavLink>
+                                <MobileNavLink href="/docs/api" onClick={() => setIsOpen(false)}>API</MobileNavLink>
                                 <MobileNavLink href="/premium" onClick={() => setIsOpen(false)}>Premium</MobileNavLink>
                             </div>
 
                             <div className="mt-auto flex flex-col gap-4">
                                 {user ? (
                                     <>
-                                        <div className="flex items-center gap-3 p-4 glass rounded-2xl">
+                                        <div className="flex items-center gap-3 p-4 glass rounded-2xl mb-2">
                                             <img src={user.avatar || "/default-avatar.png"} alt="User" className="w-12 h-12 rounded-full border border-white/20" />
                                             <div>
                                                 <div className="text-white font-bold">{user.global_name || user.username}</div>
                                                 <div className="text-gray-400 text-sm">Active Session</div>
                                             </div>
+                                        </div>
+                                        <div className="flex flex-col gap-4 mb-2">
+                                            <MobileNavLink href="/profile" onClick={() => setIsOpen(false)}>Profile</MobileNavLink>
+                                            <MobileNavLink href="/servers" onClick={() => setIsOpen(false)}>Dashboard</MobileNavLink>
                                         </div>
                                         <button onClick={handleLogout} className="w-full py-4 rounded-2xl bg-red-500/10 text-red-400 font-bold border border-red-500/20">Sign Out</button>
                                     </>
@@ -193,7 +210,7 @@ export default function Navbar() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </header>
+        </>
     );
 }
 

@@ -181,8 +181,8 @@ export default function Home() {
               <h2 className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter mb-6">Engineered for<br /><span className="text-gradient">Performance</span></h2>
               <p className="text-gray-400 text-lg max-w-xl">Every module in Argon is built from the ground up for speed, scalability, and ease of use in highly competitive environments.</p>
             </div>
-            <Link href="/tournaments" className="px-8 py-4 glass text-white font-bold rounded-2xl hover:bg-white/5 flex items-center gap-2 group border border-white/10 shrink-0">
-              Explore Platform <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            <Link href="/docs" className="px-8 py-4 glass text-white font-bold rounded-2xl hover:bg-white/5 flex items-center gap-2 group border border-white/10 shrink-0">
+              Explore Documentation <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
