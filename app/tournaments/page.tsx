@@ -94,7 +94,7 @@ function TournamentCard({ tourney }: { tourney: any }) {
                         {tourney.name}
                     </h3>
 
-                    <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-400">
+                    <div className="flex items-center gap-6 text-sm text-gray-400">
                         <div className="flex items-center gap-2">
                             <Users size={16} className="text-cyan-500" />
                             <span className="font-medium text-white">{teamCount}</span>

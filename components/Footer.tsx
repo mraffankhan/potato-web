@@ -9,7 +9,7 @@ const FOOTER_LINKS = [
         links: [
             { label: "Features", href: "/#features" },
             { label: "Tournaments", href: "/tournaments" },
-            { label: "Premium", href: "/#premium" },
+            { label: "Premium", href: "/premium" },
             { label: "Status", href: "/status" },
         ]
     },
@@ -51,12 +51,6 @@ export default function Footer() {
                         <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
                             The next generation of Discord-driven esports automation. Manage tournaments, scrims, and communities with ease.
                         </p>
-                        <div className="flex items-center gap-4">
-                            <SocialLink href="#" icon={<Twitter size={18} />} />
-                            <SocialLink href="#" icon={<Github size={18} />} />
-                            <SocialLink href="#" icon={<MessageSquare size={18} />} />
-                            <SocialLink href="#" icon={<Mail size={18} />} />
-                        </div>
                     </div>
 
                     {FOOTER_LINKS.map((section) => (
@@ -94,15 +88,4 @@ export default function Footer() {
     );
 }
 
-function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
-    return (
-        <a 
-            href={href} 
-            className="w-9 h-9 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all border border-white/5"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            {icon}
-        </a>
-    );
-}
+

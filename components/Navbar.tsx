@@ -76,7 +76,7 @@ export default function Navbar() {
                         <NavLink href="/#features">Features</NavLink>
                         <NavLink href="/tournaments">Tournaments</NavLink>
                         <NavLink href="/docs">Docs</NavLink>
-                        <NavLink href="/#premium" icon={<Trophy size={14} className="text-amber-400" />}>Premium</NavLink>
+                        <NavLink href="/premium" icon={<Trophy size={14} className="text-amber-400" />}>Premium</NavLink>
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@ export default function Navbar() {
                             <Loader2 size={20} className="text-primary animate-spin" />
                         </div>
                     ) : user ? (
-                        <div className="relative group hidden md:block">
+                        <div className="relative group">
                             <button className="flex items-center gap-3 pl-2 pr-4 py-1.5 rounded-full glass hover:bg-white/10 transition-all">
                                 <img
                                     src={user.avatar || "/default-avatar.png"}
@@ -99,8 +99,8 @@ export default function Navbar() {
                                 <ChevronDown size={14} className="text-gray-400 group-hover:text-white transition-colors" />
                             </button>
                             
-                            <div className="absolute right-0 top-full pt-2 w-48 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200">
-                                <div className="p-2 rounded-xl border border-white/10 shadow-2xl bg-black/95 backdrop-blur-xl">
+                            <div className="absolute right-0 mt-2 w-48 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                <div className="glass-darker p-2 rounded-xl border border-white/10 shadow-2xl">
                                     <Link href="/profile" className="block px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Profile</Link>
                                     <Link href="/servers" className="block px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Dashboard</Link>
                                     <div className="h-px bg-white/5 my-1 mx-2" />
@@ -162,7 +162,7 @@ export default function Navbar() {
                                 <MobileNavLink href="/#features" onClick={() => setIsOpen(false)}>Features</MobileNavLink>
                                 <MobileNavLink href="/tournaments" onClick={() => setIsOpen(false)}>Tournaments</MobileNavLink>
                                 <MobileNavLink href="/docs" onClick={() => setIsOpen(false)}>Documentation</MobileNavLink>
-                                <MobileNavLink href="/#premium" onClick={() => setIsOpen(false)}>Premium</MobileNavLink>
+                                <MobileNavLink href="/premium" onClick={() => setIsOpen(false)}>Premium</MobileNavLink>
                             </div>
 
                             <div className="mt-auto flex flex-col gap-4">
@@ -175,13 +175,6 @@ export default function Navbar() {
                                                 <div className="text-gray-400 text-sm">Active Session</div>
                                             </div>
                                         </div>
-                                        <Link 
-                                            href="/servers"
-                                            onClick={() => setIsOpen(false)}
-                                            className="w-full py-4 rounded-2xl bg-primary/10 hover:bg-primary/20 text-primary font-bold text-center border border-primary/20 transition-colors"
-                                        >
-                                            Go to Dashboard
-                                        </Link>
                                         <button onClick={handleLogout} className="w-full py-4 rounded-2xl bg-red-500/10 text-red-400 font-bold border border-red-500/20">Sign Out</button>
                                     </>
                                 ) : (

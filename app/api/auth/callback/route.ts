@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSession, sessionConfig } from '@/lib/session';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET(req: NextRequest) {
     const DISCORD_CLIENT_ID = (process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '1470031097357140063').trim();
     const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET?.trim();
@@ -94,7 +92,13 @@ export async function GET(req: NextRequest) {
         });
 
         // 4. Redirect the user back to the application
-        return NextResponse.redirect(new URL('/servers', req.url));
+        const response = NextResponse.redirect(new URL('/servers', req.url));
+        response.cookies.set(sessionConfig.name, session, {
+            ...sessionConfig.options,
+            expires
+        });
+
+        return response;
 
     } catch (err) {
         console.error('OAuth Callback Error:', err);
