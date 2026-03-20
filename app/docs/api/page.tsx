@@ -48,12 +48,12 @@ export default function ApiPage() {
                                 <h2 className="text-2xl font-bold text-white mb-2">Get Tournament Status</h2>
                                 <p className="text-gray-400">Fetches the public details of a specific tournament, including registered teams and bracket status.</p>
                             </div>
-                            <div className="flex items-center gap-3 bg-black/50 border border-white/10 rounded-xl px-4 py-3 shrink-0">
-                                <span className="px-2 py-1 bg-green-500/10 text-green-400 font-bold text-xs rounded uppercase tracking-wider">GET</span>
-                                <code className="text-white font-mono text-sm">/api/v1/tournaments/:id</code>
+                            <div className="flex items-center gap-3 bg-black/50 border border-white/10 rounded-xl px-4 py-3 w-full md:w-auto overflow-x-auto">
+                                <span className="px-2 py-1 bg-green-500/10 text-green-400 font-bold text-xs rounded uppercase tracking-wider shrink-0">GET</span>
+                                <code className="text-white font-mono text-sm whitespace-nowrap">/api/v1/tournaments/:id</code>
                                 <button 
                                     onClick={() => handleCopy("/api/v1/tournaments/:id", "get-tourney")}
-                                    className="ml-2 text-gray-500 hover:text-white transition-colors"
+                                    className="ml-auto md:ml-2 text-gray-500 hover:text-white transition-colors shrink-0"
                                 >
                                     {copiedId === "get-tourney" ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
                                 </button>
@@ -103,12 +103,12 @@ export default function ApiPage() {
                                 <h2 className="text-2xl font-bold text-white mb-2">Register Team</h2>
                                 <p className="text-gray-400">Register a user or team into an upcoming tournament via external authorization.</p>
                             </div>
-                            <div className="flex items-center gap-3 bg-black/50 border border-white/10 rounded-xl px-4 py-3 shrink-0">
-                                <span className="px-2 py-1 bg-blue-500/10 text-blue-400 font-bold text-xs rounded uppercase tracking-wider">POST</span>
-                                <code className="text-white font-mono text-sm">/api/v1/tournaments/:id/register</code>
+                            <div className="flex items-center gap-3 bg-black/50 border border-white/10 rounded-xl px-4 py-3 w-full md:w-auto overflow-x-auto">
+                                <span className="px-2 py-1 bg-blue-500/10 text-blue-400 font-bold text-xs rounded uppercase tracking-wider shrink-0">POST</span>
+                                <code className="text-white font-mono text-sm whitespace-nowrap">/api/v1/tournaments/:id/register</code>
                                 <button 
                                     onClick={() => handleCopy("/api/v1/tournaments/:id/register", "post-tourney")}
-                                    className="ml-2 text-gray-500 hover:text-white transition-colors"
+                                    className="ml-auto md:ml-2 text-gray-500 hover:text-white transition-colors shrink-0"
                                 >
                                     {copiedId === "post-tourney" ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
                                 </button>

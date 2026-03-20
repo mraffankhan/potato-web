@@ -28,10 +28,10 @@ export default function PremiumPage() {
                     <div className="mt-8 inline-flex flex-col items-center glass px-10 py-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden group max-w-2xl mx-auto backdrop-blur-xl">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-[150%] animate-[shimmer_3s_infinite]" />
                         
-                        <div className="flex items-center gap-4 text-3xl md:text-4xl font-black text-white mb-4 tracking-tight drop-shadow-md">
-                            <Sparkles size={32} className="text-primary animate-pulse" />
-                            ALL FEATURES ARE FREE
-                            <Sparkles size={32} className="text-primary animate-pulse" />
+                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4 tracking-tight drop-shadow-md text-center">
+                            <Sparkles size={32} className="text-primary animate-pulse hidden md:block" />
+                            <span>ALL FEATURES ARE FREE</span>
+                            <Sparkles size={32} className="text-primary animate-pulse hidden md:block" />
                         </div>
                         <p className="text-gray-400 md:text-lg font-medium max-w-md mx-auto leading-relaxed">
                             No plans are currently ongoing. Enjoy unlimited access to every powerful feature on Ravonixx without spending a dime.
