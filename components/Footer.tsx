@@ -73,7 +73,7 @@ export default function Footer() {
 
                 <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-gray-500 text-xs">
-                        &copy; {new Date().getFullYear()} Ravonixx Development. All rights reserved.
+                        &copy; {new Date().getFullYear()} Ravonixx. All rights reserved.
                     </p>
                     <div className="flex items-center gap-6">
                         <span className="flex items-center gap-1.5 text-xs text-green-500/80 font-medium">

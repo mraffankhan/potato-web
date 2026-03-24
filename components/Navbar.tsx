@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, LogIn, Loader2, Trophy, ChevronDown, LayoutDashboard, User as UserIcon, Book, Code, Zap, LogOut } from "lucide-react";
+import { Menu, X, LogIn, Loader2, Trophy, ChevronDown, LayoutDashboard, User as UserIcon, Book, Code, Zap, LogOut, Instagram, Mail } from "lucide-react";
 import { User } from "@/lib/session";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -88,7 +88,15 @@ export default function Navbar() {
                         <NavLink href="/#features">Features</NavLink>
                         <NavLink href="/docs">Docs</NavLink>
                         <NavLink href="/docs/api">API</NavLink>
-                        <NavLink href="/premium" icon={<Trophy size={14} className="text-amber-400" />}>Premium</NavLink>
+                        
+                        <div className="flex items-center gap-5 border-l border-white/10 pl-6 ml-2">
+                           <a href="https://instagram.com/ravonixx.dev" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
+                             <Instagram size={16} /> <span className="hidden lg:inline">@ravonixx.dev</span>
+                           </a>
+                           <a href="mailto:ravonixx.contact@gmail.com" className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
+                             <Mail size={16} /> <span className="hidden xl:inline">ravonixx.contact@gmail.com</span>
+                           </a>
+                        </div>
                     </div>
                 </div>
 
@@ -175,7 +183,22 @@ export default function Navbar() {
                                 <MobileNavLink href="/#features" onClick={() => setIsOpen(false)} icon={<Zap size={20} />} delay={0}>Features</MobileNavLink>
                                 <MobileNavLink href="/docs" onClick={() => setIsOpen(false)} icon={<Book size={20} />} delay={1}>Documentation</MobileNavLink>
                                 <MobileNavLink href="/docs/api" onClick={() => setIsOpen(false)} icon={<Code size={20} />} delay={2}>API</MobileNavLink>
-                                <MobileNavLink href="/premium" onClick={() => setIsOpen(false)} icon={<Trophy size={20} className="text-amber-400" />} delay={3}>Premium</MobileNavLink>
+                            </div>
+
+                            <div className="mt-8 flex flex-col gap-4 px-4">
+                               <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">Contact Us</div>
+                               <a href="https://instagram.com/ravonixx.dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-300 hover:text-white font-medium">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 border border-white/5">
+                                      <Instagram size={18} />
+                                  </div>
+                                  @ravonixx.dev
+                               </a>
+                               <a href="mailto:ravonixx.contact@gmail.com" className="flex items-center gap-3 text-gray-300 hover:text-white font-medium">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 border border-white/5">
+                                      <Mail size={18} />
+                                  </div>
+                                  ravonixx.contact@gmail.com
+                               </a>
                             </div>
 
                             <div className="mt-auto flex flex-col gap-4 pt-10">

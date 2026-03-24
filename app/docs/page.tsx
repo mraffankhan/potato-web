@@ -10,16 +10,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const DOCS_NAV = [
   {
-    title: "Getting Started",
-    items: ["Introduction", "Quick Start", "Bot Setup"]
+    title: "Ecosystem Hub",
+    items: ["Introduction", "Architecture", "API Reference"]
   },
   {
-    title: "Core Features",
-    items: ["Tournaments", "Scrims", "Ticketing"]
-  },
-  {
-    title: "Developers",
-    items: ["API Reference", "Webhooks", "Custom Commands"]
+    title: "Services",
+    items: ["Automation", "Staff Management", "Tournaments", "LAN Events", "Discord Integrations"]
   },
   {
     title: "Resources",
@@ -138,26 +134,26 @@ function TabContent({ tab, setActiveTab }: { tab: string, setActiveTab: (tab: st
             return (
                 <div className="space-y-10">
                     <p className="text-xl md:text-2xl leading-relaxed text-gray-300 font-medium">
-                        Welcome to the official documentation for <strong className="text-white">Ravonixx</strong>. Learn how to integrate the next generation of esports management into your Discord community.
+                        Welcome to the official documentation for the <strong className="text-white">Ravonixx Ecosystem</strong>. Learn how to integrate the next generation of complete esports infrastructure into your operations.
                     </p>
                     <div className="grid md:grid-cols-2 gap-6 mt-12">
                         <DocsCard 
                             icon={<Terminal size={24} />} 
-                            title="Quick Setup" 
-                            desc="Get your bot up and running in your server in less than 5 minutes." 
-                            onClick={() => setActiveTab("Quick Start")}
+                            title="Architecture Overview" 
+                            desc="Understand how the 5 pillars of Ravonixx connect." 
+                            onClick={() => setActiveTab("Architecture")}
                         />
                         <DocsCard 
                             icon={<Code size={24} />} 
                             title="API Guides" 
                             desc="Detailed documentation for integrating our API into your custom dashboards." 
-                            onClick={() => window.location.href = '/docs/api'}
+                            onClick={() => setActiveTab("API Reference")}
                         />
                     </div>
                     <div className="h-px bg-white/5 my-12" />
                     <h3 className="text-3xl font-bold tracking-tight text-white mb-6">Core Concept</h3>
                     <p className="text-lg text-gray-400 leading-relaxed max-w-3xl">
-                       Ravonixx is built on the principle of extreme automation. We handle the repetitive tasks—bracket generation, win/loss score calculations, and role management—so you can focus on building your community.
+                       Ravonixx is not just a bot; it is a unified ecosystem. We provide the interconnected infrastructure needed to automate workflows, manage LAN venues, oversee staff, and execute massive tournaments from a single automated architecture.
                     </p>
                     <div className="glass p-8 rounded-3xl border border-primary/20 bg-primary/[0.02] shadow-xl mt-8 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl" />
@@ -171,73 +167,56 @@ function TabContent({ tab, setActiveTab }: { tab: string, setActiveTab: (tab: st
                     </div>
                 </div>
             );
-        case "Quick Start":
-        case "Bot Setup":
+        case "Architecture":
             return (
                 <div className="space-y-8">
                     <p className="text-xl text-gray-300 leading-relaxed font-medium mb-10">
-                        Follow these simple steps to get Ravonixx fully operational in your Discord server.
+                        The Ravonixx Ecosystem relies on a connected loop of edge compute, persistent storage, and real-time WebSockets to sync data across Discord, Web, and live LAN environments.
                     </p>
-                    
-                    <div className="space-y-12">
-                        <div className="flex gap-6">
-                            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-xl border border-primary/30 shadow-[0_0_15px_rgba(var(--primary-color-rgb),0.2)]">1</div>
-                            <div className="space-y-4 pt-2">
-                                <h3 className="text-2xl font-bold text-white">Invite the Bot</h3>
-                                <p className="text-gray-400 leading-relaxed text-lg">Click the "Add Bot" button on our website and authorize Ravonixx with the recommended permissions (Manage Roles, Manage Channels, etc.).</p>
-                            </div>
-                        </div>
-                        
-                        <div className="flex gap-6">
-                            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 text-white flex items-center justify-center font-black text-xl border border-white/10">2</div>
-                            <div className="space-y-4 pt-2 w-full">
-                                <h3 className="text-2xl font-bold text-white">Initialize Setup</h3>
-                                <p className="text-gray-400 leading-relaxed text-lg">Run the setup command in your server to let the bot create the necessary categories and roles.</p>
-                                <div className="glass p-5 rounded-xl border border-white/10 bg-black/50 overflow-x-auto">
-                                    <code className="text-primary font-mono font-bold text-sm">/setup --auto</code>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-6">
-                            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/5 text-white flex items-center justify-center font-black text-xl border border-white/10">3</div>
-                            <div className="space-y-4 pt-2">
-                                <h3 className="text-2xl font-bold text-white">You're Ready!</h3>
-                                <p className="text-gray-400 leading-relaxed text-lg">Your server is now equipped. You can now use <code className="text-white bg-white/10 px-2 py-1 rounded text-sm">/tournament create</code> to launch your very first event.</p>
-                            </div>
-                        </div>
+                    <div className="glass p-8 rounded-3xl border border-white/10 bg-black/50">
+                        <h4 className="font-bold text-white text-xl mb-4">REST API & WebSockets</h4>
+                        <p className="text-gray-400">Our universal endpoint allows any consumer (a Discord server, an OBS stream, a private web dashboard) to query or subscribe to live tournament states simultaneously.</p>
                     </div>
                 </div>
             );
         case "Tournaments":
-        case "Scrims":
             return (
                 <div className="space-y-10">
                     <p className="text-xl text-gray-300 leading-relaxed font-medium mb-8">
-                        Ravonixx automates the entire {tab.toLowerCase()} lifecycle. From registration to bracket generation, everything is handled seamlessly inside Discord.
+                        The Ravonixx Tournament Engine automates the entire lifecycle. From registration to bracket generation, everything is handled seamlessly.
                     </p>
                     
                     <div className="grid md:grid-cols-3 gap-6 mb-12">
                         <div className="p-8 rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-primary/20 transition-colors">
                             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold mb-4">1</div>
                             <h4 className="font-bold text-white text-xl mb-3">Create</h4>
-                            <p className="text-sm text-gray-400 leading-relaxed">Admins initialize the event using slash commands.</p>
+                            <p className="text-sm text-gray-400 leading-relaxed">Admins initialize the event via API or Discord.</p>
                         </div>
                         <div className="p-8 rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-primary/20 transition-colors">
                             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold mb-4">2</div>
                             <h4 className="font-bold text-white text-xl mb-3">Register</h4>
-                            <p className="text-sm text-gray-400 leading-relaxed">Players connect their accounts and register seamlessly.</p>
+                            <p className="text-sm text-gray-400 leading-relaxed">Players connect their accounts uniquely to the database.</p>
                         </div>
                         <div className="p-8 rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-primary/20 transition-colors">
                             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold mb-4">3</div>
                             <h4 className="font-bold text-white text-xl mb-3">Execute</h4>
-                            <p className="text-sm text-gray-400 leading-relaxed">Brackets are generated and matches begin automatically.</p>
+                            <p className="text-sm text-gray-400 leading-relaxed">Brackets build instantly and live URLs are generated.</p>
                         </div>
                     </div>
-
-                    <div className="glass p-8 rounded-3xl border border-blue-500/20 bg-blue-500/[0.02]">
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2"><Shield className="text-blue-400" size={20} /> Permission Note</h3>
-                        <p className="text-gray-400 text-sm leading-relaxed">Only users with the <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">Tournament Admin</code> role or native Administrator permissions can manage brackets and advance teams during active tournaments.</p>
+                </div>
+            );
+        case "Discord Integrations":
+            return (
+                <div className="space-y-8">
+                    <p className="text-xl text-gray-300 leading-relaxed font-medium mb-10">
+                        While Ravonixx spans the entire web, Discord remains a core ingestion point. You can deploy our Argon bot to control your Discord server operations automatically.
+                    </p>
+                    <div className="flex gap-6">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xl border border-amber-500/30 shadow-[0_0_15px_rgba(var(--amber-color-rgb),0.2)]">!</div>
+                        <div className="space-y-4 pt-2 w-full">
+                            <h3 className="text-2xl font-bold text-white">Initializing the Connection</h3>
+                            <p className="text-gray-400 leading-relaxed text-lg">Grant our platform OAuth2 access to rapidly architect channel frameworks, lock permissions, and map staff Discord IDs to your internal Ravonixx hierarchy.</p>
+                        </div>
                     </div>
                 </div>
             );
