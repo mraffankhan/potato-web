@@ -4,9 +4,7 @@ import { createSession, sessionConfig } from '@/lib/session';
 export async function GET(req: NextRequest) {
     const DISCORD_CLIENT_ID = (process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID || '1470031097357140063').trim();
     const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET?.trim();
-    const REDIRECT_URI = (process.env.NODE_ENV === 'production'
-        ? 'https://ravonixx.xyz/api/auth/callback'
-        : 'http://localhost:3000/api/auth/callback').trim();
+    const REDIRECT_URI = `${req.nextUrl.origin}/api/auth/callback`;
 
     const url = new URL(req.url);
     const code = url.searchParams.get('code');
@@ -92,7 +90,7 @@ export async function GET(req: NextRequest) {
         });
 
         // 4. Redirect the user back to the application
-        const response = NextResponse.redirect(new URL('/servers', req.url));
+        const response = NextResponse.redirect(new URL('/', req.url));
         response.cookies.set(sessionConfig.name, session, {
             ...sessionConfig.options,
             expires
