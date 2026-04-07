@@ -5,9 +5,9 @@ import Link from "next/link";
 import { 
   ArrowRight, Trophy, Swords, Ticket, Database, 
   UserPlus, Crown, Shield, Server, Box, Terminal,
-  Zap, Globe, Layout, Share2, Layers
+  Zap, Globe, Layout, Share2, Layers, Sparkles, Bot
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
   const [stats, setStats] = useState<{
@@ -25,6 +25,31 @@ export default function Home() {
     loading: true,
     error: false
   });
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    setAiResponse(null);
+    
+    setTimeout(() => {
+      const query = searchQuery.toLowerCase();
+      if (query.includes("how to use") || query.includes("setup")) {
+        setAiResponse("To use Ravonixx, begin by connecting your platforms through the Developer Dashboard. We'll automatically provision environments from there. Type 'modules' to explore further.");
+      } else if (query.includes("price") || query.includes("cost")) {
+        setAiResponse("Ravonixx offers flexible scaling tailored to your operational needs. The base automation platform is completely free during the beta phase.");
+      } else if (query.includes("tournament")) {
+        setAiResponse("The Tournament Operations module supports immediate brackets generation for Double and Single Elimination algorithms. It automatically populates discord categories and voice channels.");
+      } else {
+        setAiResponse("I'm the Ravonixx AI Guide. I can help you understand our features, integrations, and setup processes. Try asking 'how to use' if you're a new user or ask about tournaments.");
+      }
+      setIsSearching(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     fetch('/api/stats')
@@ -52,7 +77,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden">
+      <section className="relative min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center py-12 overflow-hidden">
         {/* Animated Background Gradients */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[150px] animate-pulse" />
@@ -76,98 +101,109 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black mb-6 sm:mb-8 tracking-tighter italic uppercase leading-[1.1] text-white"
+            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black mb-12 sm:mb-16 tracking-tighter italic uppercase leading-[1.1] text-white"
           >
-            RAVONIXX <span className="text-gradient">ECOSYSTEM</span>
+            EXPLORE THE <span className="text-gradient">RAVONIXX</span>
           </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-12 max-w-2xl font-medium leading-relaxed mx-auto px-2"
-          >
-            The ultimate infrastructure for complete automation systems, real staff management, tournament operations, LAN event handling, and comprehensive community control.
-          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-5"
+            transition={{ delay: 0.2 }}
+            className="w-full max-w-4xl mx-auto mb-16 relative z-20"
           >
-            <Link
-              href="#features"
-              className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 bg-white text-black font-black text-base sm:text-lg rounded-2xl hover:bg-gray-100 transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 group"
-            >
-              Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/docs"
-              className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 glass border border-white/10 text-white font-black text-base sm:text-lg rounded-2xl hover:bg-white/5 transition-all flex items-center justify-center gap-2"
-            >
-              <Terminal size={20} /> Developer Docs
-            </Link>
-          </motion.div>
-        </div>
+            {/* AI Search Bar */}
+            <form onSubmit={handleSearch} className="relative group">
+               <div className="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+               <div className="relative flex items-center bg-black/90 backdrop-blur-3xl border border-white/20 rounded-[2.5rem] shadow-2xl p-2 md:p-3 pl-6 md:pl-8">
+                 <Sparkles className="text-primary w-6 h-6 md:w-8 md:h-8 mr-4 animate-pulse" />
+                 <input 
+                   type="text" 
+                   value={searchQuery}
+                   onChange={(e) => setSearchQuery(e.target.value)}
+                   placeholder="Ask AI anything... (e.g. 'how to use')" 
+                   className="w-full bg-transparent border-none outline-none text-white text-lg md:text-xl placeholder:text-gray-500 py-3 md:py-4"
+                 />
+                 <button 
+                    type="submit" 
+                    disabled={isSearching}
+                    className="bg-white text-black p-4 md:px-8 md:py-4 rounded-full font-black ml-2 hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shrink-0 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                 >
+                   <span className="hidden md:inline">ASK AI</span>
+                   {isSearching ? <div className="w-6 h-6 border-[3px] border-black border-t-transparent rounded-full animate-spin" /> : <ArrowRight className="w-6 h-6" />}
+                 </button>
+               </div>
+            </form>
 
-        {/* Floating Component Mockups */}
-        <div className="relative w-full max-w-6xl mx-auto mt-24 px-6 hidden lg:block">
+            <AnimatePresence>
+               {aiResponse && (
+                 <motion.div 
+                   initial={{ opacity: 0, y: -20, height: 0 }}
+                   animate={{ opacity: 1, y: 0, height: "auto" }}
+                   exit={{ opacity: 0, y: -20, height: 0 }}
+                   className="mt-6 text-left origin-top overflow-hidden"
+                 >
+                    <div className="glass-darker p-8 rounded-[2rem] border border-primary/30 relative shadow-2xl">
+                       <div className="absolute inset-0 bg-primary/5 rounded-[2rem] mix-blend-overlay pointer-events-none" />
+                       <div className="flex items-start gap-5 relative z-10">
+                          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50 shrink-0 mt-1 shadow-[0_0_15px_rgba(23,165,137,0.5)]">
+                             <Bot className="text-primary w-6 h-6" />
+                          </div>
+                          <div>
+                             <h4 className="text-white font-black text-xl mb-3 flex items-center gap-2">Ravonixx Assistant <span className="px-2 py-0.5 text-[10px] font-bold bg-primary text-black rounded-full uppercase leading-none">AI</span></h4>
+                             <p className="text-gray-300 leading-relaxed text-lg md:text-xl font-medium">{aiResponse}</p>
+                          </div>
+                       </div>
+                    </div>
+                 </motion.div>
+               )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Banner Graphic underneath Search */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="w-full aspect-video glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl relative"
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.3 }}
+             className="w-full relative mt-8 z-10 group max-w-6xl mx-auto"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
-            <div className="p-8 h-full flex flex-col">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-white/10" />
-                  <div className="w-3 h-3 rounded-full bg-white/10" />
-                  <div className="w-3 h-3 rounded-full bg-white/10" />
-                </div>
-                <div className="h-6 w-48 rounded-md bg-white/5 border border-white/5" />
-              </div>
-              <div className="flex-grow grid grid-cols-12 gap-6">
-                <div className="col-span-3 space-y-4">
-                  {[1,2,3,4].map(i => <div key={i} className="h-4 w-full rounded bg-white/5" />)}
-                </div>
-                <div className="col-span-9 space-y-6">
-                  <div className="h-32 w-full rounded-2xl bg-white/5 border border-white/5" />
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="h-40 w-full rounded-2xl bg-white/5 border border-white/5" />
-                    <div className="h-40 w-full rounded-2xl bg-white/5 border border-white/5" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Real Image Layer if available */}
-            {/* <img src="/dashboard-preview.png" className="absolute inset-0 object-cover opacity-50" /> */}
+             <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-blue-500/30 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+             <div className="relative rounded-[2.5rem] overflow-hidden glass border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+                <img src="/banner-buildyourfuture.png" alt="Build Your Future Banner" className="w-full h-auto object-cover transform scale-[1.02] group-hover:scale-100 transition-transform duration-700 ease-out" />
+             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden bg-black/40 backdrop-blur-xl border-y border-white/5">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ModernStatCard 
               title="Total Users" 
-              value={stats.error ? "Data unavailable" : stats.loading ? "Loading..." : stats.users.toLocaleString()} 
+              value={stats.error ? "N/A" : stats.loading ? "..." : stats.users.toLocaleString()} 
+              icon={<UserPlus className="w-8 h-8" />}
               prefix={!stats.loading && !stats.error ? "+" : ""} 
+              accent="from-blue-600 to-cyan-500"
             />
-            <StatCard 
-              title="Communities Powered" 
-              value={stats.error ? "Data unavailable" : stats.loading ? "Loading..." : stats.servers.toLocaleString()} 
+            <ModernStatCard 
+              title="Communities" 
+              value={stats.error ? "N/A" : stats.loading ? "..." : stats.servers.toLocaleString()} 
+              icon={<Globe className="w-8 h-8" />}
+              accent="from-purple-600 to-pink-500"
             />
-            <StatCard 
-              title="Automated Actions" 
-              value={stats.error ? "Data unavailable" : stats.loading ? "Loading..." : stats.commands.toLocaleString()} 
+            <ModernStatCard 
+              title="Actions Logged" 
+              value={stats.error ? "N/A" : stats.loading ? "..." : stats.commands.toLocaleString()} 
+              icon={<Zap className="w-8 h-8" />}
+              accent="from-primary to-emerald-500"
             />
-            <StatCard 
+            <ModernStatCard 
               title="System Uptime" 
               value={stats.uptime} 
+              icon={<Server className="w-8 h-8" />}
+              accent="from-rose-600 to-orange-500"
             />
           </div>
         </div>
@@ -266,18 +302,27 @@ export default function Home() {
   );
 }
 
-function StatCard({ title, value, prefix }: { title: string; value: string; prefix?: string }) {
+function ModernStatCard({ title, value, prefix, icon, accent }: { title: string; value: string; prefix?: string; icon: React.ReactNode; accent: string }) {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      className="glass border border-white/5 p-6 sm:p-8 rounded-3xl"
+      className="group relative overflow-hidden rounded-[2rem] glass p-8 border border-white/10 hover:border-white/20 transition-all duration-300 isolate hover:-translate-y-2 shadow-xl"
     >
-      <div className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-1 sm:mb-2 tracking-tighter italic">
-        {prefix}{value}
+      <div className={`absolute -inset-1 opacity-20 group-hover:opacity-40 blur-2xl transition-all duration-500 bg-gradient-to-br ${accent} -z-10`} />
+      
+      <div className="relative z-10 flex flex-col h-full">
+        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center bg-white/5 mb-8 shadow-inner border border-white/10 text-white group-hover:scale-110 transition-transform duration-500`}>
+          {icon}
+        </div>
+        <div className="mt-auto">
+          <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tighter italic drop-shadow-md">
+            {prefix}{value}
+          </div>
+          <div className="text-sm font-bold uppercase tracking-widest text-gray-400">{title}</div>
+        </div>
       </div>
-      <div className="text-xs font-bold uppercase tracking-widest text-gray-500">{title}</div>
     </motion.div>
   );
 }
