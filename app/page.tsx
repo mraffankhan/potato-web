@@ -26,30 +26,7 @@ export default function Home() {
     error: false
   });
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [aiResponse, setAiResponse] = useState<string | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-    setIsSearching(true);
-    setAiResponse(null);
-    
-    setTimeout(() => {
-      const query = searchQuery.toLowerCase();
-      if (query.includes("how to use") || query.includes("setup")) {
-        setAiResponse("To use Ravonixx, begin by connecting your platforms through the Developer Dashboard. We'll automatically provision environments from there. Type 'modules' to explore further.");
-      } else if (query.includes("price") || query.includes("cost")) {
-        setAiResponse("Ravonixx offers flexible scaling tailored to your operational needs. The base automation platform is completely free during the beta phase.");
-      } else if (query.includes("tournament")) {
-        setAiResponse("The Tournament Operations module supports immediate brackets generation for Double and Single Elimination algorithms. It automatically populates discord categories and voice channels.");
-      } else {
-        setAiResponse("I'm the Ravonixx AI Guide. I can help you understand our features, integrations, and setup processes. Try asking 'how to use' if you're a new user or ask about tournaments.");
-      }
-      setIsSearching(false);
-    }, 1000);
-  };
 
   useEffect(() => {
     fetch('/api/stats')
@@ -77,31 +54,19 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="relative min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center py-12 overflow-hidden">
+      <section className="relative min-h-[calc(100vh-6rem)] flex flex-col items-center justify-start pt-12 md:pt-20 pb-12 overflow-hidden w-full">
         {/* Animated Background Gradients */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[150px] animate-pulse" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 blur-[150px] animate-pulse delay-700" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-white/5 text-sm font-semibold text-gray-400 mb-8"
-          >
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            <span>Platform is Live & Scaleable</span>
-          </motion.div>
-
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center w-full">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black mb-12 sm:mb-16 tracking-tighter italic uppercase leading-[1.1] text-white"
+            className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 sm:mb-10 tracking-tighter italic uppercase leading-[1.1] text-white"
           >
             EXPLORE THE <span className="text-gradient">RAVONIXX</span>
           </motion.h1>
@@ -110,67 +75,35 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="w-full max-w-4xl mx-auto mb-16 relative z-20"
+            className="w-full max-w-4xl mx-auto mb-10 sm:mb-16 relative z-20 px-2 sm:px-0"
           >
-            {/* AI Search Bar */}
-            <form onSubmit={handleSearch} className="relative group">
-               <div className="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-               <div className="relative flex items-center bg-black/90 backdrop-blur-3xl border border-white/20 rounded-[2.5rem] shadow-2xl p-2 md:p-3 pl-6 md:pl-8">
-                 <Sparkles className="text-primary w-6 h-6 md:w-8 md:h-8 mr-4 animate-pulse" />
-                 <input 
-                   type="text" 
-                   value={searchQuery}
-                   onChange={(e) => setSearchQuery(e.target.value)}
-                   placeholder="Ask AI anything... (e.g. 'how to use')" 
-                   className="w-full bg-transparent border-none outline-none text-white text-lg md:text-xl placeholder:text-gray-500 py-3 md:py-4"
-                 />
-                 <button 
-                    type="submit" 
-                    disabled={isSearching}
-                    className="bg-white text-black p-4 md:px-8 md:py-4 rounded-full font-black ml-2 hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shrink-0 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                 >
-                   <span className="hidden md:inline">ASK AI</span>
-                   {isSearching ? <div className="w-6 h-6 border-[3px] border-black border-t-transparent rounded-full animate-spin" /> : <ArrowRight className="w-6 h-6" />}
-                 </button>
-               </div>
-            </form>
-
-            <AnimatePresence>
-               {aiResponse && (
-                 <motion.div 
-                   initial={{ opacity: 0, y: -20, height: 0 }}
-                   animate={{ opacity: 1, y: 0, height: "auto" }}
-                   exit={{ opacity: 0, y: -20, height: 0 }}
-                   className="mt-6 text-left origin-top overflow-hidden"
-                 >
-                    <div className="glass-darker p-8 rounded-[2rem] border border-primary/30 relative shadow-2xl">
-                       <div className="absolute inset-0 bg-primary/5 rounded-[2rem] mix-blend-overlay pointer-events-none" />
-                       <div className="flex items-start gap-5 relative z-10">
-                          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50 shrink-0 mt-1 shadow-[0_0_15px_rgba(23,165,137,0.5)]">
-                             <Bot className="text-primary w-6 h-6" />
-                          </div>
-                          <div>
-                             <h4 className="text-white font-black text-xl mb-3 flex items-center gap-2">Ravonixx Assistant <span className="px-2 py-0.5 text-[10px] font-bold bg-primary text-black rounded-full uppercase leading-none">AI</span></h4>
-                             <p className="text-gray-300 leading-relaxed text-lg md:text-xl font-medium">{aiResponse}</p>
-                          </div>
-                       </div>
-                    </div>
-                 </motion.div>
-               )}
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Banner Graphic underneath Search */}
-          <motion.div 
-             initial={{ opacity: 0, y: 20 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ delay: 0.3 }}
-             className="w-full relative mt-8 z-10 group max-w-6xl mx-auto"
-          >
-             <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-blue-500/30 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-             <div className="relative rounded-[2.5rem] overflow-hidden glass border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-                <img src="/banner-buildyourfuture.png" alt="Build Your Future Banner" className="w-full h-auto object-cover transform scale-[1.02] group-hover:scale-100 transition-transform duration-700 ease-out" />
-             </div>
+            {/* Sponsor Banner */}
+            <div className="flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6">
+              <div className="glass-darker p-4 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-primary/30 relative shadow-2xl overflow-hidden w-full mx-auto">
+                <div className="absolute inset-0 bg-primary/5 rounded-3xl sm:rounded-[2rem] mix-blend-overlay pointer-events-none" />
+                <div className="relative z-10">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-4 sm:mb-6 uppercase tracking-wider flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3">
+                    <div className="flex gap-2 sm:hidden mb-1"><Crown className="text-yellow-500 w-6 h-6" /><Crown className="text-yellow-500 w-6 h-6" /></div>
+                    <Crown className="text-yellow-500 w-8 h-8 hidden sm:block" /> 
+                    <span className="leading-tight">Our Sponsor:<br className="sm:hidden"/><span className="text-gradient">Money SpeakZ - Trading</span></span>
+                    <Crown className="text-yellow-500 w-8 h-8 hidden sm:block" />
+                  </h3>
+                  
+                  <a href="https://t.me/+1jNdxuBbkuBiN2M1" target="_blank" rel="noopener noreferrer" className="block w-full overflow-hidden rounded-2xl sm:rounded-[2rem] border border-white/20 hover:border-primary/50 transition-all duration-500 mb-6 sm:mb-8 group shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                    <img src="/sponsor.png" alt="Money SpeakZ Trading Sponsor" className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" />
+                  </a>
+                  
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full">
+                    <a href="https://t.me/+1jNdxuBbkuBiN2M1" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-6 py-4 bg-gradient-to-r from-primary to-blue-600 text-white font-black text-base sm:text-lg rounded-2xl hover:scale-105 transition-all text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(23,165,137,0.4)]">
+                      Click Here to Join <ArrowRight className="w-5 h-5" />
+                    </a>
+                    <Link href="/sponsor" className="w-full sm:w-auto px-6 py-4 glass border border-white/10 text-white font-black text-base sm:text-lg rounded-2xl hover:bg-white/5 transition-all text-center">
+                      Learn More
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
