@@ -1,11 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Github, Instagram, Linkedin, Mail, Trophy, Crown, Target, ChevronRight, Briefcase, User, Code, Layout } from "lucide-react";
 import Link from "next/link";
 
 export default function MayurPortfolio() {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
@@ -13,7 +13,7 @@ export default function MayurPortfolio() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
   };
